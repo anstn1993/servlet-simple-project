@@ -7,209 +7,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e50a311-10e1-4635-bbbd-d2cafff388e5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/jspsimpleprj_war.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/jspsimpleprj_war_exploded.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/JAX_WS_Apache_Axis.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Java_EE_6_Java_EE_6.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jspsimpleprj.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/axis.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/commons-discovery-0.2.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/commons-logging-1.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/javax.annotation.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/javax.ejb.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/javax.jms.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/javax.persistence.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/javax.resource.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/javax.servlet.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/javax.servlet.jsp.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/javax.servlet.jsp.jstl.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/javax.transaction.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/jaxrpc.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/json-simple-1.1.1.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/log4j-1.2.8.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/saaj.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/wsdl4j-1.5.1.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war/ROOT.war" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/META-INF/jspsimpleprj.kotlin_module" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/DAO/PostDAO.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/DAO/PostImageDAO.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/DAO/UserDAO.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/DTO/PostDTO.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/DTO/PostImageDTO.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/DTO/UserDTO.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/controller/EditPasswordController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/controller/EditProfileController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/controller/EmailCheckController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/controller/JoinCheckController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/controller/JoinController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/controller/LoginController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/controller/LogoutController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/controller/MainController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/controller/OldPasswordCheckController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/controller/PostController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/controller/PostDetaliController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/controller/UserPageController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/controller/WithdrawalController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/filter/RequestEncodingSetFilter.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/model/Post.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/model/User.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/util/FileUploadRename.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/util/Naver.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/util/SHA256.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/example/HelloWorld.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/lib/activation.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/lib/additionnal.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/lib/cos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/lib/javax.mail.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/lib/json-simple-1.1.1.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/lib/jstl-1.2.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/lib/mysql-connector-java-8.0.18.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/server-config.wsdd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/view/changepassword.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/view/edit.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/view/editprofile.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/view/index.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/view/join.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/view/login.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/view/notifyemailcheck.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/view/upload.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/view/userpage.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/view/withdrawal.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/web.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/css/main.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/css/navigation.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/images/comment.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/images/like_clicked.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/images/like_unclicked.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/images/more.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/images/profile.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0222361.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0222362.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0222363.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0222364.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0309341.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0309342.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0309343.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0325471.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0325472.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0325473.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0330321.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0331281.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0407451.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0407452.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0407453.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0519283.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0519285.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0519286.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0520331.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0520332.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0520333.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0537441.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0537442.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0537443.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0538241.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0538242.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0538243.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo0613301.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo1231900461.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo1231900462.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo1231947391.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo1231951331.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo1231958271.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo1706361.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo1706362.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo1706363.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo1706364.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo1706365.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo1706366.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo1818291.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/post/mansoo2018101.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/profile/mansoo123184421.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/profile/mansoo203936.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/META-INF/jspsimpleprj.kotlin_module" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/DAO/PostDAO.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/DAO/PostImageDAO.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/DAO/UserDAO.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/DTO/PostDTO.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/DTO/PostImageDTO.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/DTO/UserDTO.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/controller/EditPasswordController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/controller/EditProfileController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/controller/EmailCheckController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/controller/JoinCheckController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/controller/JoinController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/controller/LoginController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/controller/LogoutController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/controller/MainController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/controller/OldPasswordCheckController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/controller/PostController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/controller/PostDetaliController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/controller/UserPageController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/controller/WithdrawalController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/filter/RequestEncodingSetFilter.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/model/Post.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/model/User.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/util/FileUploadRename.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/util/Naver.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/util/SHA256.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/DAO/PostDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/DAO/PostImageDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/DAO/UserDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/DTO/PostDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/DTO/PostImageDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/DTO/UserDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/controller/EditPasswordController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/controller/EditProfileController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/controller/EmailCheckController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/controller/JoinCheckController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/controller/JoinController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/controller/LoginController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/controller/LogoutController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/controller/MainController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/controller/OldPasswordCheckController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/controller/PostController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/controller/PostDetaliController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/controller/UserPageController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/controller/WithdrawalController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/filter/RequestEncodingSetFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/model/Post.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/model/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/util/Mysql.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/util/Naver.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/util/SHA256.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/lib/activation.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/lib/additionnal.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/lib/cos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/lib/javax.mail.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/lib/json-simple-1.1.1.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/lib/jstl-1.2.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/lib/mysql-connector-java-8.0.18.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/server-config.wsdd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/view/changepassword.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/view/edit.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/view/editprofile.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/view/index.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/view/join.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/view/login.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/view/notifyemailcheck.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/view/upload.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/view/userpage.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/view/withdrawal.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/WEB-INF/web.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/css/main.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/css/navigation.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/images/comment.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/images/like_clicked.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/images/like_unclicked.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/images/more.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/images/profile.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/images/upload.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/DAO/CommentDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/controller/CommentController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/moonsoo/model/Comment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/DAO/PostDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/DAO/PostDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/DAO/PostImageDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/DAO/PostImageDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/DAO/UserDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/DAO/UserDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/controller/PostDetaliController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/controller/PostDetaliController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/classes/com/moonsoo/util/FileUploadRename.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/view/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/view/index.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/view/userpage.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/jspsimpleprj_war_exploded/WEB-INF/view/userpage.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/DAO/PostDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/DAO/PostDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/DAO/PostImageDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/DAO/PostImageDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/DAO/UserDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/DAO/UserDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/controller/PostDetaliController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/controller/PostDetaliController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/jspsimpleprj/com/moonsoo/util/FileUploadRename.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/moonsoo/DAO/PostDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/moonsoo/DAO/PostDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/moonsoo/controller/PostDetaliController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/moonsoo/controller/PostDetaliController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/moonsoo/model/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/moonsoo/model/Post.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/WEB-INF/view/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/WEB-INF/view/index.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/WEB-INF/view/userpage.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/WEB-INF/view/userpage.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -218,6 +38,25 @@
   </component>
   <component name="CodeStyleSettingsInfer">
     <option name="done" value="true" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="MySQL - soso@13.124.105.47" type="feb32156:DbDataSourceImpl" />
+      </path>
+    </expand>
+    <select />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -234,6 +73,13 @@
       </list>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="C:\Users\moonsoo\Desktop\servlet-jsp\jspsimpleprj\.idea" />
+      </set>
+    </option>
   </component>
   <component name="LogFilters">
     <option name="FILTER_ERRORS" value="false" />
@@ -253,6 +99,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="mysql" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
@@ -264,12 +111,12 @@
     <property name="settings.editor.selected.configurable" value="settings.github" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\moonsoo\Desktop\servlet-jsp\jspsimpleprj\web\WEB-INF\add.png" />
-      <recent name="C:\Users\moonsoo\Desktop\servlet-jsp\jspsimpleprj\web\WEB-INF\lib" />
-      <recent name="C:\Users\moonsoo\Desktop\servlet-jsp\jspsimpleprj\web" />
-      <recent name="C:\Users\moonsoo\Desktop\servlet-jsp\jspsimpleprj\out\artifacts\jspsimpleprj_war_exploded\WEB-INF" />
-      <recent name="C:\Users\moonsoo\Desktop\servlet-jsp\jspsimpleprj\web\WEB-INF" />
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\moonsoo\Desktop\servlet-jsp\jspsimpleprj\out\artifacts\jspsimpleprj_war_exploded\WEB-INF\view" />
+      <recent name="C:\Users\moonsoo\Desktop\servlet-jsp\jspsimpleprj\web\WEB-INF\view" />
+      <recent name="C:\Users\moonsoo\Desktop\servlet-jsp\jspsimpleprj\out\artifacts\jspsimpleprj_war_exploded\images" />
+      <recent name="C:\Users\moonsoo\Desktop\servlet-jsp\jspsimpleprj\web\images" />
+      <recent name="C:\Users\moonsoo\Desktop\servlet-jsp\jspsimpleprj\web\css" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.moonsoo.DAO" />
@@ -277,12 +124,12 @@
       <recent name="com.moonsoo.controller" />
       <recent name="com.moonsoo.filter" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\moonsoo\Desktop\servlet-jsp\jspsimpleprj\out\artifacts\jspsimpleprj_war_exploded\WEB-INF\view" />
-      <recent name="C:\Users\moonsoo\Desktop\servlet-jsp\jspsimpleprj\web\WEB-INF\view" />
-      <recent name="C:\Users\moonsoo\Desktop\servlet-jsp\jspsimpleprj\out\artifacts\jspsimpleprj_war_exploded\images" />
-      <recent name="C:\Users\moonsoo\Desktop\servlet-jsp\jspsimpleprj\web\images" />
-      <recent name="C:\Users\moonsoo\Desktop\servlet-jsp\jspsimpleprj\web\css" />
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\moonsoo\Desktop\servlet-jsp\jspsimpleprj\web\WEB-INF\add.png" />
+      <recent name="C:\Users\moonsoo\Desktop\servlet-jsp\jspsimpleprj\web\WEB-INF\lib" />
+      <recent name="C:\Users\moonsoo\Desktop\servlet-jsp\jspsimpleprj\web" />
+      <recent name="C:\Users\moonsoo\Desktop\servlet-jsp\jspsimpleprj\out\artifacts\jspsimpleprj_war_exploded\WEB-INF" />
+      <recent name="C:\Users\moonsoo\Desktop\servlet-jsp\jspsimpleprj\web\WEB-INF" />
     </key>
   </component>
   <component name="RunManager" selected="Tomcat Server.jspsimpleprj[local]">
@@ -427,7 +274,7 @@
     <option name="viewStates">
       <list>
         <serviceView>
-          <option name="contentProportion" value="0.09221312" />
+          <option name="contentProportion" value="0.22454672" />
           <treeState>
             <expand>
               <path>
@@ -438,6 +285,15 @@
                 <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
                 <item name="Tomcat Server" type="7427dc5b:ServiceModel$ServiceGroupNode" />
                 <item name="Running" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              </path>
+              <path>
+                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
+                <item name="root:MySQL - soso@13.124.105.47" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              </path>
+              <path>
+                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
+                <item name="root:MySQL - soso@13.124.105.47" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+                <item name="com.intellij.database.console.session.MessageBusSession@2c5448d5" type="9fbbdea:ServiceModel$ServiceNode" />
               </path>
             </expand>
             <select />
@@ -474,19 +330,36 @@
       <workItem from="1578037241093" duration="16541000" />
       <workItem from="1578066952588" duration="18027000" />
       <workItem from="1578124957978" duration="14903000" />
-      <workItem from="1578239924717" duration="19950000" />
+      <workItem from="1578239924717" duration="20443000" />
+      <workItem from="1578301389521" duration="34078000" />
     </task>
+    <task id="LOCAL-00001" summary="version 1.0">
+      <created>1578260121319</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1578260121319</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="version 1.0" />
+    <option name="LAST_COMMIT_MESSAGE" value="version 1.0" />
+  </component>
   <component name="WindowStateProjectService">
-    <state x="574" y="88" key="#com.intellij.ide.util.MemberChooser" timestamp="1578259312181">
+    <state x="361" y="71" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1578301512316">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="574" y="88" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578259312181" />
-    <state x="574" y="88" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1578132953334" />
+    <state x="361" y="71" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578301512316" />
+    <state x="574" y="88" key="#com.intellij.ide.util.MemberChooser" timestamp="1578335253998">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="574" y="88" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578320711230" />
+    <state x="574" y="88" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1578335253998" />
     <state x="449" y="139" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1577907768867">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -495,79 +368,48 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="523" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1577985120257" />
-    <state x="344" y="0" key="CommitChangelistDialog2" timestamp="1578260056982">
+    <state x="344" y="0" key="CommitChangelistDialog2" timestamp="1578260119588">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="344" y="0" key="CommitChangelistDialog2/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578260056982" />
+    <state x="344" y="0" key="CommitChangelistDialog2/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578260119588" />
     <state x="549" y="153" key="FileChooserDialogImpl" timestamp="1578259922902">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="549" y="153" key="FileChooserDialogImpl/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578259922902" />
-    <state width="1328" height="550" key="GridCell.Tab.0.bottom" timestamp="1578260070423">
+    <state x="641" y="303" width="265" height="218" key="Github.ShareDialog" timestamp="1578260470124">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1328" height="550" key="GridCell.Tab.0.bottom/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578260070423" />
-    <state width="1328" height="550" key="GridCell.Tab.0.center" timestamp="1578260070423">
+    <state x="641" y="303" width="265" height="218" key="Github.ShareDialog/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578260470124" />
+    <state width="196" height="539" key="HiddenNamespacesPopup" timestamp="1578301542271">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1328" height="550" key="GridCell.Tab.0.center/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578260070423" />
-    <state width="1328" height="550" key="GridCell.Tab.0.left" timestamp="1578260070423">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1328" height="550" key="GridCell.Tab.0.left/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578260070423" />
-    <state width="1328" height="550" key="GridCell.Tab.0.right" timestamp="1578260070423">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1328" height="550" key="GridCell.Tab.0.right/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578260070423" />
-    <state width="1328" height="550" key="GridCell.Tab.1.bottom" timestamp="1578260070423">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1328" height="550" key="GridCell.Tab.1.bottom/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578260070423" />
-    <state width="1328" height="550" key="GridCell.Tab.1.center" timestamp="1578260070423">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1328" height="550" key="GridCell.Tab.1.center/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578260070423" />
-    <state width="1328" height="550" key="GridCell.Tab.1.left" timestamp="1578260070423">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1328" height="550" key="GridCell.Tab.1.left/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578260070423" />
-    <state width="1328" height="550" key="GridCell.Tab.1.right" timestamp="1578260070423">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1328" height="550" key="GridCell.Tab.1.right/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578260070423" />
-    <state width="1328" height="550" key="GridCell.Tab.2.bottom" timestamp="1578260070423">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1328" height="550" key="GridCell.Tab.2.bottom/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578260070423" />
-    <state width="1328" height="550" key="GridCell.Tab.2.center" timestamp="1578260070423">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1328" height="550" key="GridCell.Tab.2.center/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578260070423" />
-    <state width="1328" height="550" key="GridCell.Tab.2.left" timestamp="1578260070423">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1328" height="550" key="GridCell.Tab.2.left/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578260070423" />
-    <state width="1328" height="550" key="GridCell.Tab.2.right" timestamp="1578260070423">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1328" height="550" key="GridCell.Tab.2.right/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578260070423" />
+    <state width="196" height="539" key="HiddenNamespacesPopup/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578301542271" />
     <state x="277" y="54" key="SettingsEditor" timestamp="1578259882339">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="277" y="54" key="SettingsEditor/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578259882339" />
-    <state x="459" y="236" key="com.intellij.ide.util.TipDialog" timestamp="1578239924686">
+    <state x="459" y="236" key="com.intellij.ide.util.TipDialog" timestamp="1578342721182">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="459" y="236" key="com.intellij.ide.util.TipDialog/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578066953229" />
+    <state x="459" y="236" key="com.intellij.ide.util.TipDialog/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578342721182" />
     <state x="459" y="236" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1578239924686" />
-    <state x="-1901" y="5" width="1128" height="735" maximized="true" key="dock-window-1" timestamp="1578250342780">
+    <state x="334" y="65" width="1122" height="734" key="dock-window-1" timestamp="1578313307725">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="334" y="65" width="1122" height="734" key="dock-window-1/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578313307725" />
+    <state x="179" y="58" width="1122" height="734" maximized="true" key="dock-window-2" timestamp="1578319406818">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="179" y="58" width="1122" height="734" maximized="true" key="dock-window-2/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578319406818" />
+    <state x="-1749" y="0" width="1123" height="735" maximized="true" key="dock-window-3" timestamp="1578342779193">
       <screen x="-1920" y="0" width="1280" height="680" />
     </state>
-    <state x="-1901" y="5" width="1128" height="735" maximized="true" key="dock-window-1/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578250342780" />
-    <state x="-1754" y="7" width="1128" height="735" maximized="true" key="dock-window-2" timestamp="1578257994274">
-      <screen x="-1920" y="0" width="1280" height="680" />
+    <state x="-1749" y="0" width="1123" height="735" maximized="true" key="dock-window-3/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578342779193" />
+    <state x="425" y="187" key="run.anything.popup" timestamp="1578335267283">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="-1754" y="7" width="1128" height="735" maximized="true" key="dock-window-2/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578257994274" />
+    <state x="425" y="187" key="run.anything.popup/0.0.1536.824/-1920.0.1280.680@0.0.1536.824" timestamp="1578310188768" />
+    <state x="425" y="187" key="run.anything.popup/0.0.1536.824@0.0.1536.824" timestamp="1578335267283" />
     <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1578258425127">
       <screen x="0" y="0" width="1536" height="824" />
     </state>

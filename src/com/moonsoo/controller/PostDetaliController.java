@@ -20,20 +20,18 @@ public class PostDetaliController extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
         int postId = Integer.parseInt(request.getParameter("postId"));
 
-        List<String> images = PostDAO.getInstance().getPostImages(postId);
-
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("images", images);
-        jsonObject.put("size", images.size());
-        System.out.println(jsonObject.toString());
-        response.getWriter().print(jsonObject.toString());
-        /*
-        * {images:[0, 0, 0, 0, 0..], size:4}
-        *
-        *
-        * */
+        JSONObject postData = PostDAO.getInstance().getPost(postId);//게시물 데이터를 json object로 리턴
+        if(postData != null) {
+            System.out.println(postData.toString());
+            response.getWriter().print(postData.toString());
+        }
+        else {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
 
     }
 }

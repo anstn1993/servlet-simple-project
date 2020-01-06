@@ -28,10 +28,12 @@ public class Post {
         this.time = time;
     }
 
-    public Post(int userId, int postId, String fileName) {
+    public Post(int userId, int postId, String article, String fileName, String time) {
         this.userId = userId;
         this.postId = postId;
+        this.article = article;
         this.fileName = fileName;
+        this.time = time;
     }
 
     public int getUserId() {

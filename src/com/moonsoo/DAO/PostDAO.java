@@ -2,8 +2,11 @@ package com.moonsoo.DAO;
 
 import com.moonsoo.DTO.PostDTO;
 import com.moonsoo.DTO.PostImageDTO;
+import com.moonsoo.model.Comment;
 import com.moonsoo.model.Post;
 import com.moonsoo.util.Mysql;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.sql.*;
 import java.text.ParseException;
@@ -59,6 +62,66 @@ public class PostDAO {
         return (postResult != 0 && postImageResult != 0) ? 1 : 0;
     }
 
+    public JSONObject getPost(int postId) {
+
+        String url = Mysql.getInstance().getUrl();
+        String sql = "select user_id, article, date, file_name from post join post_image on post.id = post_image.post_id where post.id=?";
+
+        JSONObject postData = new JSONObject();
+        postData.put("postId", postId);
+
+        List<String> images = new ArrayList<>();
+        JSONArray comments = new JSONArray();//댓글 데이터 json 객체를 담을 json array
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setInt(1, postId);
+            ResultSet rs = pst.executeQuery();
+            while(rs.next()) {
+                if(rs.isFirst()) {//첫 번째 행인 경우
+                    postData.put("userId", rs.getInt("user_id"));
+                    postData.put("article", rs.getString("article"));
+                    Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("date"));
+                    postData.put("time", beforeTime(date));
+                    images.add(rs.getString("file_name"));
+                }
+                else {
+                    images.add(rs.getString("file_name"));
+                }
+            }
+
+            sql = "select comment.id, comment.post_id, comment.user_id, user.nickname, user.image, comment.comment, comment.date from comment join user on comment.user_id=user.id where post_id=?";
+            pst = con.prepareStatement(sql);
+            pst.setInt( 1, postId);
+            rs = pst.executeQuery();
+            while(rs.next()) {
+                JSONObject comment = new JSONObject();
+                comment.put("id", rs.getInt("id"));
+                comment.put("postId", rs.getInt("post_id"));
+                comment.put("userId", rs.getInt("user_id"));
+                comment.put("nickname", rs.getString("nickname"));
+                comment.put("profile", rs.getString("image"));
+                comment.put("comment", rs.getString("comment"));
+                comment.put("time", beforeTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("date"))));
+                comments.add(comment);
+            }
+
+            postData.put("images", images);
+            postData.put("size", images.size());
+            postData.put("comments", comments);
+            rs.close();
+            pst.close();
+            con.close();
+            return postData;
+        } catch (ClassNotFoundException | SQLException | ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
     //게시물 모델 리스트를 가져온다. 매개변수로 전달된 인덱스로부터 18개씩(페이징 적용)
     public List<Post> getPosts(int startIndex) {
 
@@ -99,7 +162,7 @@ public class PostDAO {
     public List<Post> getUserPosts(int userId, int startIndex) {
         List<Post> posts = new ArrayList<>();
         String url = Mysql.getInstance().getUrl();
-        String sql = "select user.id, post.id as post_id, pi.file_name from post, (select*from post_image)pi, (select*from user)user" +
+        String sql = "select user.id, post.id as post_id, post.article, pi.file_name, post.date from post, (select*from post_image)pi, (select*from user)user" +
                 " where post.user_id=user.id and post.id=pi.post_id and user.id=? group by post_id order by post_id desc limit ?, 18";
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -109,10 +172,11 @@ public class PostDAO {
             pst.setInt(2, startIndex);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
-
                 int postId = rs.getInt("post_id");
+                String article = rs.getString("article");
                 String fileName = rs.getString("file_name");
-                posts.add(new Post(userId, postId, fileName));
+                Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("date"));
+                posts.add(new Post(userId, postId, article, fileName, beforeTime(date)));
             }
             rs.close();
             pst.close();
@@ -121,7 +185,7 @@ public class PostDAO {
 
             return posts;
 
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (ClassNotFoundException | SQLException | ParseException e) {
             e.printStackTrace();
             return null;
         }
@@ -201,6 +265,30 @@ public class PostDAO {
         }
     }
 
+    public String getUploadTime(int postId) {
+        String url = Mysql.getInstance().getUrl();
+        String sql = "select date from post where id=?";
+        Date date = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setInt(1, postId);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("date"));
+            }
+
+            rs.close();
+            pst.close();
+            con.close();
+            return beforeTime(date);
+        } catch (ClassNotFoundException | SQLException | ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     //게시물 수정 update
     public int update(int postId, String article, List<String> newFiles, List<String> transferredExistingFiles) {
@@ -270,6 +358,7 @@ public class PostDAO {
         return ret;
 
     }
+
 
 
 }

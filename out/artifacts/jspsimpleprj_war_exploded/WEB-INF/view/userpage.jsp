@@ -25,6 +25,7 @@
 <div class="container">
 
     <input id="session_userid" type="hidden" value="${sessionScope.id}">
+    <input id="page_owner_id" type="hidden" value="${id}">
 
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
@@ -73,7 +74,7 @@
             </div>
         </div>
     </nav>
-    <div class="col-md-3 col-sm-4">
+    <div class="col-md-3 col-sm-3">
         <c:if test="${user.profile == null}">
             <img src="/images/profile.png" alt="프로필 사진" class="img-circle" width="200" height="200">
         </c:if>
@@ -90,15 +91,32 @@
                 <c:if test="${sessionScope.id == user.id}">
                     <a href="user/edit" class="btn btn-default">프로필 편집</a>
                 </c:if>
+                <c:if test="${sessionScope.id != user.id && followStatus}">
+                    <button id="follow_btn" class="btn btn-default" value="true">팔로잉</button>
+                </c:if>
+                <c:if test="${sessionScope.id != user.id && !followStatus}">
+                    <button id="follow_btn" class="btn btn-info" value="false">팔로우</button>
+                </c:if>
             </li>
         </ul>
-        <p>${user.introduce}</p>
+        <ul class="list-inline">
+            <li style="width: 15%">
+                게시물 <h4 style="text-align: center">${size}</h4>
+            </li>
+            <li role="button" style="width: 15%">
+                팔로워 <h4>100</h4>
+            </li>
+            <li role="button" style="width: 15%">
+                팔로잉 <h4>100</h4>
+            </li>
+        </ul>
+        <p style="word-break: break-all">${user.introduce}</p>
     </div>
 </div>
 <div class="container">
     <div class="row">
         <c:forEach var="post" items="${posts}">
-            <div class="col-sm-6 col-md-4">
+            <div id="post${post.postId}" class="col-sm-6 col-md-4">
                 <a href="#" class="thumbnail">
                     <img src="/post/${post.fileName}" alt="게시물 이미지" width="500" height="500"
                          style="height: 300px; overflow: auto" role="button"
@@ -195,9 +213,15 @@
                                 <div class="row" style="height: 40px; width: 90%">
                                     <ul class="list-inline">
                                         <!--좋아요 버튼-->
-                                        <li style="padding-left: 30px;width: 60%">
-                                            <img src="/images/like_unclicked.png" alt="좋아요" width="30" height="30" role="button">
+                                        <li style="padding-left: 30px;width: 15%">
+                                            <img id="like_btn_in_modal" src="/images/like_unclicked.png" alt="좋아요" width="30" height="30" role="button">
                                         </li>
+
+                                        <!--좋아요 개수-->
+                                        <li id="like_count_box" role="button" style="width: 60%">
+                                            좋아요 <span id="like_count_in_modal">0</span>개
+                                        </li>
+
                                         <!--업로드 시간-->
                                         <li id="time_box" style="color:#777777">
 
@@ -231,25 +255,100 @@
     </div>
 </div>
 
+<!--댓글 수정 dialog-->
+<div class="modal fade" id="edit_comment" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">댓글 수정</h4>
+            </div>
+            <div class="modal-body">
+                <textarea class="form-control" id="editted_comment" cols="30" rows="3" placeholder="댓글"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+                <button id="edit_comment_btn" type="button" class="btn btn-primary">수정</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!--좋아요 리스트 dialog-->
+<div class="modal fade" id="like_list" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">좋아요</h4>
+            </div>
+            <div class="modal-body" style="overflow: auto">
+                <div id="like_list_box" class="container" style="padding: 0px; width: 100%">
+
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 </body>
-<script src="//code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
 
     var postId;//게시물 수정이나 삭제를 할 때 사용할 게시물 번호
-    var myId = $('#session_userid').val();
+    var myId = $('#session_userid').val();//자기 자신의 id
+    var ownerId = $('#page_owner_id').val();//페이지 주인의 id
     //프로필 사진이나 닉네임을 누를 시 사용자 페이지로 이동
     function requestUserPage(userId) {
         location.href = '/user?id=' + userId;
+    }
+
+    //댓글 수정
+    function editComment(commentId, userId) {
+        var existingComment = $('#comment'+commentId).html();
+        console.log("commentId: " + commentId);
+        console.log("userId: " + userId);
+        console.log("existingComment: " + existingComment);
+        $('#editted_comment').val(existingComment);//기존 댓글을 먼저 textarea에 설정
+
+        $('#edit_comment_btn').on('click', function () {
+            var edittedComment = $('#editted_comment').val();
+            if (edittedComment == '') {//댓글이 없는 경우
+                alert('댓글을 입력해주세요.');
+                return;
+            }
+
+            $.ajax({
+                type: 'PUT',
+                url: '/comment',
+                data: {
+                    'commentId': commentId,
+                    'userId': userId,
+                    'comment': edittedComment
+                }
+            }).done(function (result) {
+                alert('댓글이 수정되었습니다.');
+                $('#edit_comment').modal('hide');
+                $('#comment'+result).html(edittedComment);
+            }).fail(function (e) {
+                if (e.status == 406) {
+                    alert('유효하지 않은 접근 입니다.');
+                } else if (e.status == 500) {
+                    alert('서버에 문제가 생겼습니다. 잠시 후 다시 시도해 주세요.');
+                } else if (e.status == 403) {
+                    alert('로그인 후 이용하세요.');
+                    location.href = '/login';
+                }
+            });
+
+        });
     }
 
     //댓글 삭제
     function deleteComment(commentId, userId) {
         var confirm = window.confirm("정말로 댓글을 삭제하시겠습니까?");
         if (confirm) {
-            var formData = new FormData();
-            formData.append("commentId", commentId);
-            formData.append("userId", userId);
             $.ajax({
                 type: "DELETE",
                 url: '/comment',
@@ -259,12 +358,15 @@
                 }
             }).done(function (result) {
                 alert('댓글이 삭제되었습니다.');
-                $('#comment' + result).remove();//해당 댓글 태그 삭제
+                $('#comment_box' + result).remove();//해당 댓글 태그 삭제
             }).fail(function (e) {
                 if (e.status == 406) {
                     alert('유효하지 않은 접근 입니다.');
                 } else if (e.status == 500) {
                     alert('서버에 문제가 생겼습니다. 잠시 후 다시 시도해 주세요.');
+                } else if (e.status == 403) {
+                    alert('로그인 후 이용하세요.');
+                    location.href='/login';
                 }
             });
         }
@@ -278,9 +380,11 @@
         $('#indicator_box').html('');//이미지 표시자 초기화
         $('#time_box').html('');//시간 초기화
         $('#comment_box').html('');//댓글 초기화
+        $('#like_btn_in_modal').attr('src', '/images/like_unclicked.png').attr('value', 'false');//좋아요 상태 초기화(false)
+        $('#like_count_in_modal').html('0');//좋아요 개수 초기화(0)
         if (article != null && article != '') {//게시글 존재시 게시글을 댓글 박스 최상단에 추가
             $('#comment_box').append(
-                '<div class="row" style="margin-right: 0px; width:100%">' +
+                '<div id="comment_box' + id + '" class="row" style="margin-right: 0px; width:100%">' +
                 <!--좌측 박스-->
                 '<div class="col-md-5 col-sm-5 col-xs-5">' +
                 <!--프로필 사진, 닉네임, 게시 시간 박스-->
@@ -311,8 +415,6 @@
         }).done(function (result) {
             var data = JSON.parse(result);
             $('#time_box').html(data.time);//업로드 시간 입력
-            var article = data.article;
-
 
             console.log(data);
             console.log(data.size);
@@ -328,6 +430,15 @@
                 }
             }
 
+            //좋아요 버튼 설정
+            if(data.likeStatus) {//좋아요를 누른 경우
+                $('#like_btn_in_modal').attr('src', '/images/like_clicked.png').attr('value', 'true');
+            }
+
+            //좋아요 개수 설정
+            $('#like_count_in_modal').html(data.likeCount);
+
+
             for (var i = 0; i < data.comments.length; i++) {//댓글 삽입
                 var commentId = data.comments[i].id;
                 var profile = data.comments[i].profile;
@@ -337,7 +448,7 @@
                 var userId = data.comments[i].userId;
                 if(myId != null && myId == userId) {
                     $('#comment_box').append(
-                        '<div id="comment' + commentId + '" class="row" style="margin-right: 0px; width:100%">' +
+                        '<div id="comment_box' + commentId + '" class="row" style="margin-right: 0px; width:100%">' +
                         <!--좌측 박스-->
                         '<div class="col-md-5 col-sm-5 col-xs-5">' +
                         <!--프로필 사진, 닉네임, 게시 시간 박스-->
@@ -355,21 +466,21 @@
                         <!--수정 삭제 버튼-->
 
                         '<div class="row">' +
-                        '<div class="col-md-12 col-sm-12 col-xs-12" style="font-size: 12px; margin-left: 20px"><span role="button" style="margin-right: 10px">수정</span><span role="button" onclick="deleteComment(' + commentId + ',' + userId + ')">삭제</span></div>' +
+                        '<div class="col-md-12 col-sm-12 col-xs-12" style="font-size: 12px; margin-left: 20px"><span role="button" style="margin-right: 10px" data-target="#edit_comment" data-toggle="modal" onclick="editComment(' + commentId + ',' + userId + ')">수정</span><span role="button" onclick="deleteComment(' + commentId + ',' + userId + ')">삭제</span></div>' +
                         '</div>' +
                         '</div>' +
                         '</div>' +
 
                         <!--우측 박스-->
                         '<div class="col-md-7 col-sm-7 col-xs-7">' +
-                        '<div class="row" style="height: auto;padding-top:15px; word-break: break-all">' + comment + '</div>' +
+                        '<div id="comment' + commentId + '" class="row" style="height: auto;padding-top:15px; word-break: break-all">' + comment + '</div>' +
                         '<div class="row">' +
                         '</div>' +
                         '</div>');
                 }
                 else {
                     $('#comment_box').append(
-                        '<div id="comment' + commentId + '" class="row" style="margin-right: 0px; width:100%">' +
+                        '<div id="comment_box' + commentId + '" class="row" style="margin-right: 0px; width:100%">' +
                         <!--좌측 박스-->
                         '<div class="col-md-5 col-sm-5 col-xs-5">' +
                         <!--프로필 사진, 닉네임, 게시 시간 박스-->
@@ -389,7 +500,7 @@
 
                         <!--우측 박스-->
                         '<div class="col-md-7 col-sm-7 col-xs-7">' +
-                        '<div class="row" style="height: auto;padding-top:15px; word-break: break-all">' + comment + '</div>' +
+                        '<div id="comment' + commentId + '" class="row" style="height: auto;padding-top:15px; word-break: break-all">' + comment + '</div>' +
                         '<div class="row">' +
                         '</div>' +
                         '</div>');
@@ -410,7 +521,103 @@
 
     //게시물 삭제 페이지로 이동
     function deletePost() {
-        console.log('post id: ' + postId);
+        var confirm = window.confirm('정말로 삭제하시겠습니까?');
+        if(confirm) {
+            $.ajax({
+                type:'DELETE',
+                url:'/post',
+                data:{
+                    'userId':myId,
+                    'postId':postId
+                }
+            }).done(function (result) {
+                alert('게시물이 삭제되었습니다.');
+                $('#post_detail').modal('hide');
+                $('#post'+result).remove();//게시물 삭제
+            }).fail(function (e) {
+                if (e.status == 406) {
+                    alert('유효하지 않은 접근 입니다.');
+                } else if (e.status == 500) {
+                    alert('서버에 문제가 생겼습니다. 잠시 후 다시 시도해 주세요.');
+                } else if (e.status == 403) {
+                    alert('로그인 후 이용하세요.');
+                    location.href = '/login';
+                }
+            });
+        }
+    }
+
+    //좋아요 개수 클릭시 모달 창 open
+    function showLikeList(postId) {
+        $.ajax({
+            type:'GET',
+            url:'/like',
+            data:{
+                'postId':postId
+            }
+        }).done(function (result) {
+            data = JSON.parse(result);
+            console.log(data);
+            $('#like_list_box').html('');//좋아요 리스트 초기화
+            for(var i = 0; i < data.length; i ++) {
+                if(myId != data[i].userId) {
+                    $('#like_list_box').append(
+                        '<div class="row" style="margin-bottom: 15px" role="button" onclick="requestUserPage('+data[i].userId+')">'+
+                        '<div class="col-md-1">'+
+                        '<img src="/profile/'+data[i].profile+'" alt="프로필 사진" width="40" height="40" class="img-circle">'+
+                        '</div>'+
+                        '<div class="col-md-9">'+
+                        '<h4>'+data[i].nickname+'</h4>'+
+                        '</div>'+
+                        '<div class="col-md-1">' +
+                        '<button class="btn btn-info">팔로우</button>' +
+                        '</div>'+
+                        '</div>'
+                    );
+                }
+                else {
+                    $('#like_list_box').append(
+                        '<div class="row" style="margin-bottom: 15px" role="button" onclick="requestUserPage('+data[i].userId+')">'+
+                        '<div class="col-md-1">'+
+                        '<img src="/profile/'+data[i].profile+'" alt="프로필 사진" width="40" height="40" class="img-circle">'+
+                        '</div>'+
+                        '<div class="col-md-9">'+
+                        '<h4>'+data[i].nickname+'</h4>'+
+                        '</div>'+
+                        '</div>'
+                    );
+                }
+            }
+            $('#like_list').modal('show');
+
+        }).fail(function (e) {
+            var status = e.status;
+            if(status == 403) {
+                alert('로그인 후 이용하세요.');
+                location.href='/login';
+            }
+            else if(status == 406) {
+                alert('유효하지 않은 접근 입니다.');
+            }
+            else {//500
+                alert('서버에 문제가 생겼습니다. 잠시 후 다시 시도해 주세요.');
+            }
+        });
+    }
+
+    function processFollow(myId, ownerId){
+        var status = $('#follow_btn').val();
+        if(status == 'false') {//팔로우를 한 경우
+            $('#follow_btn').val('true');//팔로우 상태를 true로 전환
+            $('#follow_btn').attr('class', 'btn btn-default');
+            $('#follow_btn').html('팔로잉');
+        }
+        else {//팔로우를 취소한 경우
+            $('#follow_btn').val('false');//팔로우 상태를 false로 전환
+            $('#follow_btn').attr('class', 'btn btn-info');
+            $('#follow_btn').html('팔로우');
+
+        }
     }
 
     $(document).ready(function () {
@@ -444,7 +651,7 @@
                 var time = commentData.time;
                 var userId = commentData.userId;
                 $('#comment_box').append(
-                    '<div id="comment' + commentId + '" class="row" style="margin-right: 0px; width:100%">' +
+                    '<div id="comment_box' + commentId + '" class="row" style="margin-right: 0px; width:100%">' +
                     <!--좌측 박스-->
                     '<div class="col-md-5 col-sm-5 col-xs-5">' +
                     <!--프로필 사진, 닉네임, 게시 시간 박스-->
@@ -461,14 +668,14 @@
                     '</div>' +
                     <!--수정 삭제 버튼-->
                     '<div class="row">' +
-                    '<div class="col-md-12 col-sm-12 col-xs-12" style="font-size: 12px; margin-left: 20px"><span role="button" style="margin-right: 10px">수정</span><span role="button"  onclick="deleteComment(' + commentId + ',' + userId + ')">삭제</span></div>' +
+                    '<div class="col-md-12 col-sm-12 col-xs-12" style="font-size: 12px; margin-left: 20px"><span role="button" style="margin-right: 10px" data-target="#edit_comment" data-toggle="modal" onclick="editComment(' + commentId + ',' + userId + ')">수정</span><span role="button"  onclick="deleteComment(' + commentId + ',' + userId + ')">삭제</span></div>' +
                     '</div>' +
                     '</div>' +
                     '</div>' +
 
                     <!--우측 박스-->
                     '<div class="col-md-7 col-sm-7 col-xs-7">' +
-                    '<div class="row" style="height: auto;padding-top:15px; word-break: break-all">' + comment + '</div>' +
+                    '<div id="comment'+commentId+'" class="row" style="height: auto;padding-top:15px; word-break: break-all">' + comment + '</div>' +
                     '<div class="row">' +
                     '</div>' +
                     '</div>');
@@ -483,6 +690,84 @@
                 }
             });
         });
+
+        //모달 창의 좋아요 버튼을 누른 경우
+        $('#like_btn_in_modal').on('click', function () {
+            processLike(postId, myId);
+        });
+
+        $('#like_count_box').on('click', function () {//좋아요 개수 클릭 리스너
+            showLikeList(postId);
+        });
+
+        $('#follow_btn').on('click', function () {//팔로우 버튼 클릭 리스너
+            processFollow(myId, ownerId);
+        });
+
     });
+
+    //좋아요 처리
+    function processLike(postId, userId) {
+        console.log($('#like_btn_in_modal').attr('value'));
+        console.log('postId: ' + postId);
+        console.log('userId: ' + userId);
+        var status = $('#like_btn_in_modal').attr('value');
+        if (status == 'false') {//좋아요를 한 경우
+            $('#like_btn_in_modal').attr('value', 'true');//좋아요 상태를 true로 변경
+            console.log('좋아요');
+            $.ajax({
+                type:'POST',
+                url:'/like',
+                data:{
+                    'postId':postId,
+                    'userId':userId
+                }
+            }).done(function (result) {
+                $('#like_btn_in_modal').attr('src', '/images/like_clicked.png');
+                var likeCount = Number($('#like_count_in_modal').html()) + 1;
+                $('#like_count_in_modal').html(String(likeCount));
+            }).fail(function (e) {
+                var status = e.status;
+                if(status == 403) {
+                    alert('로그인 후 이용하세요.');
+                    location.href='/login';
+                }
+                else if(status == 406) {
+                    alert('유효하지 않은 접근 입니다.');
+                }
+                else {//500
+                    alert('서버에 문제가 생겼습니다. 잠시 후 다시 시도해 주세요.');
+                }
+
+            });
+
+        } else {//좋아요를 취소한 경우
+            $('#like_btn_in_modal').attr('value', 'false');
+            console.log('좋아요 취소');
+            $.ajax({
+                type: 'DELETE',
+                url: '/like',
+                data: {
+                    'postId': postId,
+                    'userId': userId
+                }
+            }).done(function (result) {
+                $('#like_btn_in_modal').attr('src', '/images/like_unclicked.png');
+                var likeCount = Number($('#like_count_in_modal').html()) - 1;
+                $('#like_count_in_modal').html(String(likeCount));
+            }).fail(function (e) {
+                var status = e.status;
+                if (status == 403) {
+                    alert('로그인 후 이용하세요.');
+                    location.href = '/login';
+                } else if (status == 406) {
+                    alert('유효하지 않은 접근 입니다.');
+                } else {//500
+                    alert('서버에 문제가 생겼습니다. 잠시 후 다시 시도해 주세요.');
+                }
+            });
+        }
+    }
+
 </script>
 </html>

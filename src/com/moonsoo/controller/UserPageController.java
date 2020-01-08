@@ -1,9 +1,11 @@
 package com.moonsoo.controller;
 
+import com.moonsoo.DAO.FollowDAO;
 import com.moonsoo.DAO.PostDAO;
 import com.moonsoo.DAO.UserDAO;
 import com.moonsoo.model.Post;
 import com.moonsoo.model.User;
+import org.json.simple.JSONObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -54,10 +56,14 @@ public class UserPageController extends HttpServlet {
 
         User user = UserDAO.getInstance().getUserData(id);
         List<Post> posts = PostDAO.getInstance().getUserPosts(id, 0);
+        int followingId = (int)request.getSession().getAttribute("id");
+        boolean followStatus = FollowDAO.getInstance().getFollowStatus(followingId, id);
 
         request.setAttribute("id", id);
         request.setAttribute("user", user);
         request.setAttribute("posts", posts);
+        request.setAttribute("size", posts.size());
+        request.setAttribute("followStatus", followStatus);
         request.getRequestDispatcher("/WEB-INF/view/userpage.jsp").forward(request, response);
     }
 }

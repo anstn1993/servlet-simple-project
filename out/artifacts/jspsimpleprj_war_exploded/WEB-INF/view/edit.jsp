@@ -113,7 +113,6 @@
 
 </div>
 </body>
-<script src="//code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
     //기존 이미지 파일명을 미리 추가
     var finalFiles = new Array();

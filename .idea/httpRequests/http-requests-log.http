@@ -1,0 +1,16 @@
+GET http://localhost:8080/post
+Accept: */*
+Cache-Control: no-cache
+
+<> 2020-01-07T094602.200.html
+
+###
+
+GET http://localhost:8080/login
+Accept: */*
+Cache-Control: no-cache
+
+<> 2020-01-07T094546.200.html
+
+###
+

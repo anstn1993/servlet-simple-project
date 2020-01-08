@@ -56,25 +56,47 @@ public class CommentController extends HttpServlet {
     }
 
     @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String commentId_ = request.getParameter("commentId");
+        String userId_ = request.getParameter("userId");
+        String comment = request.getParameter("comment");
+
+        int commentId = 0;
+        int userId = 0;
+
+        if(commentId_ != null && !commentId_.equals("") && userId_ != null && !userId_.equals("") && comment != null && !comment.equals("")) {//유효한 쿼리 스트링
+            commentId = Integer.parseInt(commentId_);
+            userId = Integer.parseInt(userId_);
+        }
+        else {
+            response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);//406
+            return;
+        }
+
+        if(request.getSession().getAttribute("id") != null && userId != (int)request.getSession().getAttribute("id")) {//다른 사람의 댓글 수정 요청을 하는 경우를 차단
+            response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);//406
+            return;
+        }
+
+        int result = CommentDAO.getInstance().updateComment(commentId, comment);
+        if(result == 2 || result == 0) {//db에서 처리가 잘 되지 않은 경우
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
+            return;
+        }
+
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.getWriter().print(commentId);
+
+    }
+
+    @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
-        System.out.println("댓글 삭제 요청");
-        System.out.println(request.getRequestURI());
-//        Collection<Part> parts = request.getParts();
-        String commentId_ = null;
-        String userId_ = null;
-//        for(Part part: parts) {
-//            System.out.println("key: " + part.getName() +", content-type: " + part.getContentType());
-//            if(part.getName().equals("commentId")) {
-//                commentId_ = request.getParameter(part.getName());
-//            }
-//            else if(part.getName().equals("userId")) {
-//                userId_ = request.getParameter(part.getName());
-//            }
-//        }
-        commentId_ = request.getParameter("commentId");
-        userId_ = request.getParameter("userId");
+
+
+        String commentId_ = request.getParameter("commentId");
+        String userId_ = request.getParameter("userId");
 
         System.out.println("commentId: " + commentId_);
         System.out.println("userId: " + userId_);

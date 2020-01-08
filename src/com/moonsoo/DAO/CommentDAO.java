@@ -60,6 +60,28 @@ public class CommentDAO {
         }
     }
 
+    //댓글 수정
+    public int updateComment(int commentId, String comment) {
+        String url = Mysql.getInstance().getUrl();
+        String sql = "update comment set comment=? where id=?";
+        int result = 0;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setString(1, comment);
+            pst.setInt(2, commentId);
+            result = pst.executeUpdate();
+
+            pst.close();
+            con.close();
+            return result;
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            return 2;
+        }
+    }
+
     //댓글 삭제
     public int deleteComment(int commentId) {
         String url = Mysql.getInstance().getUrl();
@@ -78,6 +100,27 @@ public class CommentDAO {
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
             return 2;
+        }
+    }
+
+    //게시물을 삭제할 때 게시물에 달린 모든 댓글을 삭제하는 메소드
+    public int deleteComments(int postId) {
+        String url = Mysql.getInstance().getUrl();
+        String sql = "delete from comment where post_id=?";
+        int result = -1;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setInt(1, postId);
+            result = pst.executeUpdate();
+
+            pst.close();
+            con.close();
+            return result;
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            return -1;
         }
     }
 

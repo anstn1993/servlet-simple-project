@@ -1,5 +1,6 @@
 package com.moonsoo.controller;
 
+import com.moonsoo.DAO.CommentDAO;
 import com.moonsoo.DAO.PostDAO;
 import com.moonsoo.DAO.PostImageDAO;
 import com.moonsoo.DTO.PostDTO;
@@ -89,27 +90,27 @@ public class PostController extends HttpServlet {//게시물 관련 컨트롤러
                 part.write(getServletContext().getRealPath("post") + File.separator + newFileName);//이미지 서버의 post디렉토리에 저장
                 newFiles.add(newFileName);//모델 클래스에 이미지 파일 명 추가
                 part.delete();//임시 이미지 데이터 삭제
-            } else if(part.getName().equals("postId")) {
+            } else if (part.getName().equals("postId")) {
                 postId = Integer.parseInt(request.getParameter(part.getName()));//게시물 번호 설정
-            } else if(part.getName().equals("article")){//게시글 파트인 경우
+            } else if (part.getName().equals("article")) {//게시글 파트인 경우
                 article = request.getParameter(part.getName());
-            } else if(part.getName().contains("existingImage")) {
+            } else if (part.getName().contains("existingImage")) {
                 transferredExistingFiles.add(request.getParameter(part.getName()));//기존 이미지 파일 명 추가
             }
         }
 
         int result = 0;
 //        if(newFiles.size() != 0) {//새로운 파일이 넘어온 경우
-            List<String> oldFiles = PostImageDAO.getInstance().getFiles(postId);//기존 파일명을 담을 리스트
-            //서버로 넘어온 기존 파일을 제외한 나머지 파일 삭제
-            for(String oldFile : oldFiles) {
-                int index = transferredExistingFiles.indexOf(oldFile);
-                if(index == -1) {//넘어온 파일 명 리스트에 기존 파일이 존재하지 않으면 그 파일은 삭제
-                    File file = new File(getServletContext().getRealPath("post") + File.separator + oldFile);
-                    file.delete();
-                }
+        List<String> oldFiles = PostImageDAO.getInstance().getFiles(postId);//기존 파일명을 담을 리스트
+        //서버로 넘어온 기존 파일을 제외한 나머지 파일 삭제
+        for (String oldFile : oldFiles) {
+            int index = transferredExistingFiles.indexOf(oldFile);
+            if (index == -1) {//넘어온 파일 명 리스트에 기존 파일이 존재하지 않으면 그 파일은 삭제
+                File file = new File(getServletContext().getRealPath("post") + File.separator + oldFile);
+                file.delete();
             }
-            result = PostDAO.getInstance().update(postId, article, newFiles, transferredExistingFiles);//0:실패, 1:성공, 2:에러
+        }
+        result = PostDAO.getInstance().update(postId, article, newFiles, transferredExistingFiles);//0:실패, 1:성공, 2:에러
 //        }
 //        else {//새로운 파일이 안 넘어온 경우
 //            result = PostDAO.getInstance().update(postId, article);//0:실패, 1:성공, 2:에러
@@ -154,7 +155,46 @@ public class PostController extends HttpServlet {//게시물 관련 컨트롤러
         }
     }
 
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String userId_ = request.getParameter("userId");
+        String postId_ = request.getParameter("postId");
 
+        int userId = 0;
+        int postId = 0;
+
+        if(userId_ != null && !userId_.equals("") && postId_ != null && !postId_.equals("")) {
+            userId = Integer.parseInt(userId_);
+            postId = Integer.parseInt(postId_);
+        }
+        else {
+            response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);//406
+            return;
+        }
+
+        if((int)request.getSession().getAttribute("id") != userId) {
+            response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);//406
+            return;
+        }
+        //게시물 이미지 파일 삭제
+        List<String> images = PostDAO.getInstance().getPostImages(postId);
+        for(String image: images) {
+            File file = new File(getServletContext().getRealPath("post")+File.separator+image);//파일 객체 생성
+            file.delete();//파일 삭제
+        }
+
+        //댓글 삭제
+        int commentDeleteResult = CommentDAO.getInstance().deleteComments(postId);
+        //게시물 삭제
+        int postDeleteResult = PostDAO.getInstance().deletePost(postId);
+
+        if(commentDeleteResult != -1 && postDeleteResult != -1) {
+            response.getWriter().print(postId);
+        }
+        else {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//5000
+        }
+    }
 
     private String getExtension(String contentType) {
         return contentType.split("/")[1];

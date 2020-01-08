@@ -105,7 +105,6 @@
     </div>
 </div>
 </body>
-<script src="//code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
 
     var accountForm = /^[a-zA-Z0-9]*$/;//영어와 숫자로 조합

@@ -23,8 +23,15 @@ public class PostDetaliController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
         int postId = Integer.parseInt(request.getParameter("postId"));
+        JSONObject postData = null;
+        if(request.getSession().getAttribute("id") == null) {
+            postData = PostDAO.getInstance().getPost(postId);//게시물 데이터를 json object로 리턴
+        }
+        else {
+            int loginUserId = (int) request.getSession().getAttribute("id");
+            postData = PostDAO.getInstance().getPost(loginUserId, postId);//게시물 데이터를 json object로 리턴
+        }
 
-        JSONObject postData = PostDAO.getInstance().getPost(postId);//게시물 데이터를 json object로 리턴
         if(postData != null) {
             System.out.println(postData.toString());
             response.getWriter().print(postData.toString());

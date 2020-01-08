@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="a3d8182a-16e5-4cb6-84f4-066d23385011" name="jspsimpleprj" url="http://13.124.105.47">
+        <fileTransfer host="13.124.105.47" port="22" privateKey="C:\Users\moonsoo\Desktop\응용1단계\aws키\aws_password.pem" rootFolder="/home/ubuntu/jspsimpleprj" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions controlEncoding="UTF-8" dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

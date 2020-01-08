@@ -8,8 +8,9 @@ public class Post {
     private String article;
     private String fileName;
     private String time;
+    private boolean likeStatus;//로그인한 사용자가 해당 게시물을 좋아하는지 여부
 
-    public Post(int userId, int postId, String nickname, String profile, String article, String fileName, String time) {
+    public Post(int userId, int postId, String nickname, String profile, String article, String fileName, String time, boolean likeStatus) {
         this.userId = userId;
         this.postId = postId;
         this.nickname = nickname;
@@ -17,6 +18,7 @@ public class Post {
         this.article = article;
         this.fileName = fileName;
         this.time = time;
+        this.likeStatus = likeStatus;
     }
 
     public Post(int userId, int postId, String nickname, String profile, String fileName, String time) {
@@ -90,5 +92,9 @@ public class Post {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public boolean getLikeStatus() {
+        return likeStatus;
     }
 }

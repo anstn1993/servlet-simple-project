@@ -75,37 +75,6 @@
             var password = $('#password').val();
             if (account.trim() != "" && password.trim() != "") {
                 return true;
-                // $.ajax(
-                //     {
-                //         url: '/login',
-                //         type: 'POST',
-                //         data: {
-                //             'account': account,
-                //             'password': password
-                //         },
-                //         success: function (result) {
-                //             if (result == 0) {
-                //                 //로그인 실패
-                //                 alert('아이디와 비밀번호를 확인해주세요.');
-                //                 location.href = "/login";
-                //             } else if (result == 1) {//로그인 성공
-                //                 alert(account + '님, 환영합니다!');
-                //                 location.href = "/";
-                //             } else if (result == 2) {//이메일 미인증
-                //                 alert('이메일 인증 후 로그인 해주세요.');
-                //                 location.href = "/login";
-                //             }
-                //         }
-                //     }
-                // );
-                // // .done(function (result) {
-                // //
-                // // });
-                //     // .fail(function () {
-                //     //     alert('로그인 과정에서 오류가 발생했습니다.');
-                //     //     location.href = "/login";
-                //     // });
-
             } else {
                 alert('아이디와 비밀번호 모두 입력해주세요.');
                 return false;

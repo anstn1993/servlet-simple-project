@@ -17,6 +17,7 @@ public class EmailCheckController extends HttpServlet {
         String code = request.getParameter("code");
         if(code == null || code.equals("") || account == null || account.equals("")) {
             //TODO: exception
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//400
             return;
         }
 
@@ -44,32 +45,16 @@ public class EmailCheckController extends HttpServlet {
             }
             else {
                 //TODO:에러
-                //메인 화면으로 리다이렉트
-                response.setCharacterEncoding("UTF-8");
-                response.setContentType("text/html;charset=UTF-8");
-                response.getWriter().println("<script>");
-                response.getWriter().println("alert('오류 발생');");
-                response.getWriter().println("location.href='/'");
-                response.getWriter().println("</script>");
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
             }
         }
         else if(authResult == 1) {//인증 상태
             //TODO: 이미 인증된 이메일 입니다.
-            response.setCharacterEncoding("UTF-8");
-            response.setContentType("text/html;charset=UTF-8");
-            response.getWriter().println("<script>");
-            response.getWriter().println("alert('이미 인증하셨습니다. 로그인 하세요.');");
-            response.getWriter().println("location.href='/login'");
-            response.getWriter().println("</script>");
+            response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);//405
         }
         else {//에러
             //TODO: 에러 발생
-            response.setCharacterEncoding("UTF-8");
-            response.setContentType("text/html;charset=UTF-8");
-            response.getWriter().println("<script>");
-            response.getWriter().println("alert('오류 발생');");
-            response.getWriter().println("location.href='/'");
-            response.getWriter().println("</script>");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
         }
     }
 }

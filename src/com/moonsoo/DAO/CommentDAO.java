@@ -1,7 +1,10 @@
 package com.moonsoo.DAO;
 
 import com.moonsoo.model.Comment;
+import com.moonsoo.util.ConnectionPool;
 import com.moonsoo.util.Mysql;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.sql.*;
 import java.text.ParseException;
@@ -20,21 +23,26 @@ public class CommentDAO {
     }
 
     //댓글 업로드시 게시물 삽입
-    public int insert(Comment comment) {//0:실패, 1:성공, 2:에러
-        String url = Mysql.getInstance().getUrl();
+    public int insert(final Comment comment) {//0:실패, 1:성공, 2:에러
+//        String url = Mysql.getInstance().getUrl();
         String sql = "insert into comment (post_id, user_id, comment) values (?, ?, ?)";
         int result = 0;
+
+        Connection con = null;
+        PreparedStatement pst = null;
+        Statement st = null;
+        ResultSet rs = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
-            PreparedStatement pst = con.prepareStatement(sql);
+//            Class.forName("com.mysql.cj.jdbc.Driver");
+//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
+            con = ConnectionPool.getConnection();
+            pst = con.prepareStatement(sql);
             pst.setInt(1, comment.getPostId());
             pst.setInt(2, comment.getUserId());
             pst.setString(3, comment.getComment());
             result = pst.executeUpdate();
 
-            Statement st = con.createStatement();
-            ResultSet rs = null;
+            st = con.createStatement();
             if (result != 0) {
                 sql = "select comment.id, comment.date, user.nickname, user.image from comment join user on comment.user_id=user.id order by comment.id desc limit 0, 1";
                 rs = st.executeQuery(sql);
@@ -53,80 +61,192 @@ public class CommentDAO {
             st.close();
             pst.close();
             con.close();
-            return result;
-        } catch (ClassNotFoundException | SQLException | ParseException e) {
+        } catch (SQLException | ParseException e) {
             e.printStackTrace();
             return 2;
+        } finally {
+            if(rs != null) {
+                try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+            if(st != null) {
+                try { st.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+            if(pst != null) {
+                try { pst.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+            if(con != null) {
+                try { con.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
         }
+        return result;
     }
 
     //댓글 수정
-    public int updateComment(int commentId, String comment) {
-        String url = Mysql.getInstance().getUrl();
+    public int updateComment(final int commentId, final String comment) {
+//        String url = Mysql.getInstance().getUrl();
         String sql = "update comment set comment=? where id=?";
         int result = 0;
+
+        Connection con = null;
+        PreparedStatement pst = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
-            PreparedStatement pst = con.prepareStatement(sql);
+//            Class.forName("com.mysql.cj.jdbc.Driver");
+//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
+            con = ConnectionPool.getConnection();
+
+            pst = con.prepareStatement(sql);
             pst.setString(1, comment);
             pst.setInt(2, commentId);
             result = pst.executeUpdate();
 
             pst.close();
             con.close();
-            return result;
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return 2;
+        } finally {
+            if(pst != null) {
+                try { pst.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+            if(con != null) {
+                try { con.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
         }
+        return result;
     }
 
     //댓글 삭제
-    public int deleteComment(int commentId) {
+    public int deleteComment(final int commentId) {
         String url = Mysql.getInstance().getUrl();
         String sql = "delete from comment where id=?";
         int result = 0;
+        Connection con = null;
+        PreparedStatement pst = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
-            PreparedStatement pst = con.prepareStatement(sql);
+//            Class.forName("com.mysql.cj.jdbc.Driver");
+//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
+            con = ConnectionPool.getConnection();
+
+            pst = con.prepareStatement(sql);
             pst.setInt(1, commentId);
             result = pst.executeUpdate();
 
-            pst.close();
-            con.close();
-            return result;
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return 2;
+        } finally {
+            if(pst != null) {
+                try { pst.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+            if(con != null) {
+                try { con.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
         }
+        return result;
     }
 
     //게시물을 삭제할 때 게시물에 달린 모든 댓글을 삭제하는 메소드
-    public int deleteComments(int postId) {
+    public int deleteComments(final int postId) {
         String url = Mysql.getInstance().getUrl();
         String sql = "delete from comment where post_id=?";
         int result = -1;
+
+        Connection con = null;
+        PreparedStatement pst = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
-            PreparedStatement pst = con.prepareStatement(sql);
+//            Class.forName("com.mysql.cj.jdbc.Driver");
+//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
+            con = ConnectionPool.getConnection();
+            pst = con.prepareStatement(sql);
             pst.setInt(1, postId);
             result = pst.executeUpdate();
 
-            pst.close();
-            con.close();
-            return result;
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return -1;
+        } finally {
+            if(pst != null) {
+                try { pst.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+            if(con != null) {
+                try { con.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
         }
+        return result;
+    }
+
+    public JSONArray getNextComments(final int postId, final int lastCommentId) {
+        JSONArray comments = new JSONArray();
+        int startIndex = 0;
+        String sql = null;
+        Connection con = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+
+        try {
+            con = ConnectionPool.getConnection();
+            sql = "select count(*) as start_index from comment where post_id=? and id<=?";
+            pst = con.prepareStatement(sql);
+            pst.setInt(1, postId);
+            pst.setInt(2, lastCommentId);
+            rs = pst.executeQuery();
+            if(rs.next()) {
+                startIndex = rs.getInt("start_index");
+            }
+
+            sql = "select comment.id, comment.post_id, comment.user_id, user.nickname, user.image, comment.comment, comment.date " +
+                    "from comment " +
+                    "join user on comment.user_id=user.id " +
+                    "where post_id=? limit ?, 4";
+            pst = con.prepareStatement(sql);
+            pst.setInt(1, postId);
+            pst.setInt(2, startIndex);
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                JSONObject comment = new JSONObject();
+                comment.put("id", rs.getInt("id"));
+                comment.put("postId", rs.getInt("post_id"));
+                comment.put("userId", rs.getInt("user_id"));
+                comment.put("nickname", rs.getString("nickname"));
+                comment.put("profile", rs.getString("image"));
+                comment.put("comment", rs.getString("comment"));
+                comment.put("time", beforeTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("date"))));
+                comments.add(comment);
+            }
+
+        } catch (SQLException | ParseException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            if(rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(pst != null) {
+                try {
+                    pst.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(con != null) {
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return comments;
     }
 
 
+
     //업로드된 게시물이 몇 분 전에 만들어진 게시물인지를 리턴해주는 메소드
-    public String beforeTime(Date date) {
+    public String beforeTime(final Date date) {
 
         //캘린더 클레스는 추상 클레스라서 객체를 생성할 수 없다.
         //대신 getInstance()메소드를 통해서 객체 생성이 가능하다.

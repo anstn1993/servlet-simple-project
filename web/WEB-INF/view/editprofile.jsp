@@ -288,7 +288,7 @@
         $.ajax(
             {
                 url: '/user/edit',
-                type: 'POST',
+                type: 'PUT',
                 processData: false,
                 contentType: false,
                 data: formData

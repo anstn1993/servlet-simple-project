@@ -27,12 +27,7 @@ public class EditProfileController extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getSession().getAttribute("id") == null) {
-            response.setCharacterEncoding("UTF-8");
-            response.setContentType("text/html;charset=UTF-8");
-            response.getWriter().println("<script>");
-            response.getWriter().println("alert('로그인 후 이용하세요.');");
-            response.getWriter().println("location.href = '/login'");
-            response.getWriter().println("</script>");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);//401
             return;
         }
         super.service(request, response);
@@ -45,79 +40,7 @@ public class EditProfileController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession();
 
-        String contentType = request.getContentType();
-
-        HashMap<String, String> userData = new HashMap<>();//수정된 사용자 데이터를 저장할 해시 맵
-
-        if (contentType != null && contentType.toLowerCase().startsWith("multipart/")) {
-            Collection<Part> parts = request.getParts();
-
-            String newProfileName = null;
-
-            for (Part part : parts) {
-                System.out.println("파라미터 명: " + part.getName() + ", contentType: " + part.getContentType() + ", size: " + part.getSize() + "bytes");
-
-                if (part.getContentType() != null && part.getContentType().contains("image/") && part.getSize() > 0) {
-                    System.out.println(part.getHeader("content-Disposition"));
-                    String timeStamp = new SimpleDateFormat("HHmmss").format(new Date());
-                    String extension =  getExtension(part.getContentType());
-                    newProfileName = request.getSession().getAttribute("account") + timeStamp +"."+ extension;//새로운 프로필 사진 명
-                    System.out.println("업로드 파일 명: "+ newProfileName);
-                    part.write(request.getServletContext().getRealPath("profile")+ File.separator+newProfileName);
-                    part.delete();
-                    userData.put("profile", newProfileName);//userData에 프로필 사진 추가
-                }
-                else {
-                    System.out.println("key: " + part.getName()+", value: " + request.getParameter(part.getName()));
-                    userData.put(part.getName(), request.getParameter(part.getName()));//사용자 정보 설정
-                    session.setAttribute(part.getName(), request.getParameter(part.getName()));//세션 업데이트
-                    if(part.getName().equals("email")) {//이메일 데이터 part인 경우 userData에 email hash값도 추가
-                        userData.put("emailHash", SHA256.getSha256(request.getParameter(part.getName())));
-                    }
-                }
-            }
-
-
-            for(String key : userData.keySet()) {
-                System.out.println("key : "+ key + ", value: " + userData.get(key));
-            }
-
-            if(session.getAttribute("profile") != null && newProfileName != null) {//기존 프로필 사진O && 새로운 프로필 사진O
-                File file = new File(getServletContext().getRealPath("profile")+File.separator+session.getAttribute("profile"));
-                file.delete();//기존 프로필 사진 제거
-                session.setAttribute("profile", newProfileName);//세션에 새로운 프로필 사진 명으로 변경
-            }
-
-            if(session.getAttribute("profile") != null
-                    && userData.get("profileName") != null
-                    && userData.get("profileName").equals(session.getAttribute("profile"))){//기존 프로필 사진에서 수정하지 않은 경우
-                userData.put("profile", (String)session.getAttribute("profile"));
-            }
-
-            if(session.getAttribute("profile") != null && newProfileName == null && userData.get("profileName") == null) {//프로필 사진을 지운 경우
-                File file = new File(getServletContext().getRealPath("profile")+File.separator+session.getAttribute("profile"));
-                file.delete();//기존 프로필 사진 제거
-                session.setAttribute("profile", null);//세션에서 프로필 사진 명 제거
-            }
-
-            if(session.getAttribute("profile") == null && newProfileName != null) {//프로필 사진이 없다가 생긴 경우
-                session.setAttribute("profile", newProfileName);//세션에 새로운 프로필 사진 명 등록
-            }
-
-//
-
-            int result = UserDAO.getInstance().updateUserData(userData);
-            if(result == 0 || result == 2) {
-                response.getWriter().println("0");
-            }
-            else {
-                response.getWriter().println("1");
-            }
-        }
 
 //        if((profileFile == null || profileFile.equals("")) && (profileName == null || profileName.equals(""))) {//파일이 안 넘어옴 && 파일 명도 없는 경우
 //            if(session.getAttribute("profile") != null && session.getAttribute("profile").equals("")) {//기존 이미지가 있다면
@@ -167,6 +90,88 @@ public class EditProfileController extends HttpServlet {
 
 
 
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
+        HttpSession session = request.getSession();
+
+        String contentType = request.getContentType();
+
+        HashMap<String, String> userData = new HashMap<>();//수정된 사용자 데이터를 저장할 해시 맵
+
+        if (contentType != null && contentType.toLowerCase().startsWith("multipart/")) {
+            Collection<Part> parts = request.getParts();
+
+            String newProfileName = null;
+
+            for (Part part : parts) {
+                System.out.println("파라미터 명: " + part.getName() + ", contentType: " + part.getContentType() + ", size: " + part.getSize() + "bytes");
+
+                if (part.getContentType() != null && part.getContentType().contains("image/") && part.getSize() > 0) {
+                    System.out.println(part.getHeader("content-Disposition"));
+                    String timeStamp = new SimpleDateFormat("HHmmss").format(new Date());
+                    String extension =  getExtension(part.getContentType());
+                    newProfileName = request.getSession().getAttribute("account") + timeStamp +"."+ extension;//새로운 프로필 사진 명
+                    System.out.println("업로드 파일 명: "+ newProfileName);
+                    part.write(request.getServletContext().getRealPath("profile")+ File.separator+newProfileName);
+                    part.delete();
+                    userData.put("profile", newProfileName);//userData에 프로필 사진 추가
+                }
+                else {
+                    System.out.println("key: " + part.getName()+", value: " + request.getParameter(part.getName()));
+                    userData.put(part.getName(), request.getParameter(part.getName()));//사용자 정보 설정
+                    if(part.getName().equals("id")) {//id인 경우에는 value를 숫자로
+                        session.setAttribute(part.getName(), Integer.parseInt(request.getParameter(part.getName())));//세션 업데이트
+                    }
+                    else {
+                        session.setAttribute(part.getName(), request.getParameter(part.getName()));//세션 업데이트
+                    }
+                    if(part.getName().equals("email")) {//이메일 데이터 part인 경우 userData에 email hash값도 추가
+                        userData.put("emailHash", SHA256.getSha256(request.getParameter(part.getName())));
+                    }
+                }
+            }
+
+
+            for(String key : userData.keySet()) {
+                System.out.println("key : "+ key + ", value: " + userData.get(key));
+            }
+
+            if(session.getAttribute("profile") != null && newProfileName != null) {//기존 프로필 사진O && 새로운 프로필 사진O
+                File file = new File(getServletContext().getRealPath("profile")+File.separator+session.getAttribute("profile"));
+                file.delete();//기존 프로필 사진 제거
+                session.setAttribute("profile", newProfileName);//세션에 새로운 프로필 사진 명으로 변경
+            }
+
+            if(session.getAttribute("profile") != null
+                    && userData.get("profileName") != null
+                    && userData.get("profileName").equals(session.getAttribute("profile"))){//기존 프로필 사진에서 수정하지 않은 경우
+                userData.put("profile", (String)session.getAttribute("profile"));
+            }
+
+            if(session.getAttribute("profile") != null && newProfileName == null && userData.get("profileName") == null) {//프로필 사진을 지운 경우
+                File file = new File(getServletContext().getRealPath("profile")+File.separator+session.getAttribute("profile"));
+                file.delete();//기존 프로필 사진 제거
+                session.setAttribute("profile", null);//세션에서 프로필 사진 명 제거
+            }
+
+            if(session.getAttribute("profile") == null && newProfileName != null) {//프로필 사진이 없다가 생긴 경우
+                session.setAttribute("profile", newProfileName);//세션에 새로운 프로필 사진 명 등록
+            }
+
+//
+
+            int result = UserDAO.getInstance().updateUserData(userData);
+            if(result == 0 || result == 2) {
+                response.getWriter().println("0");
+            }
+            else {
+                response.getWriter().println("1");
+            }
+        }
     }
 
     //확장자 return

@@ -146,18 +146,17 @@
 
             } else {
                 $('#image' + i).attr('id', 'image' + newIndex);
-                $('#selector_label'+ i).attr('id', 'selector_label'+newIndex).attr('for', 'selector'+newIndex);
+                $('#selector_label' + i).attr('id', 'selector_label' + newIndex).attr('for', 'selector' + newIndex);
 
                 newIndex++;
             }
         }
 
-        while(true){//finalFiles배열에서 삭제된 이미지 제거
+        while (true) {//finalFiles배열에서 삭제된 이미지 제거
             var deletedIndex = finalFiles.indexOf(0);
-            if(deletedIndex != -1) {
+            if (deletedIndex != -1) {
                 finalFiles.splice(deletedIndex, 1);
-            }
-            else {
+            } else {
                 break;
             }
         }
@@ -165,10 +164,9 @@
         $('.selector_box').remove();
         $('#select_delete_image_btn_box').html('');
 
-        if(finalFiles.length == 0) {//이미지 파일이 모두 삭제된 경우
+        if (finalFiles.length == 0) {//이미지 파일이 모두 삭제된 경우
             $('#delete_image_btn_box').empty();
-        }
-        else {//이미지 파일이 남아있는 경우
+        } else {//이미지 파일이 남아있는 경우
             $('#delete_image_btn').val('이미지 삭제');
         }
     }
@@ -217,18 +215,13 @@
             data: formData
         }).done(function (result) {
             console.log('success');
-            if (result == 0) {
-                alert('업로드 실패');
-            } else if (result == 1) {
-                alert('업로드 성공');
-                location.href = '/';
-            } else {
-                alert('업로드 실패');
+            alert('업로드 성공');
+            window.location = document.referrer;//이전 페이지로 돌아가면서 새로고침
+        }).fail(function (e) {
+            var status = e.status;
+            if (status == 500) {
+                alert('서버에 문제가 생겼습니다. 잠시 후 다시 시도해주세요.');
             }
-
-        }).fail(function () {
-            console.log('fail');
-            alert('업로드 실패');
         });
     }
 
@@ -286,7 +279,7 @@
                         $('#upload_image_box').append(
                             '<span id="image' + index + '">' +
                             '<span style="position:relative">' +
-                            '<label id="selector_label'+index+'" for="selector' + index + '">' +
+                            '<label id="selector_label' + index + '" for="selector' + index + '">' +
                             '<img src=' + dataURI + ' alt="이미지" width="75" height="75" class ="upload_image">' +
                             '</label>' +
                             '</span>' +

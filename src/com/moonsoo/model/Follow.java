@@ -3,11 +3,11 @@ package com.moonsoo.model;
 public class Follow {
     private int id;
     private int followingUserId;
-    private int followerUserId;
+    private int followedUserId;
 
-    public Follow(int followingUserId, int followerUserId) {
+    public Follow(int followingUserId, int followedUserId) {
         this.followingUserId = followingUserId;
-        this.followerUserId = followerUserId;
+        this.followedUserId = followedUserId;
     }
 
     public int getId() {
@@ -18,7 +18,7 @@ public class Follow {
         return followingUserId;
     }
 
-    public int getFollowerUserId() {
-        return followerUserId;
+    public int getFollowedUserId() {
+        return followedUserId;
     }
 }

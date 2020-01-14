@@ -15,12 +15,7 @@ public class EditPasswordController extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if(request.getSession().getAttribute("id") == null) {
-            response.setCharacterEncoding("UTF-8");
-            response.setContentType("text/html;charset=UTF-8");
-            response.getWriter().println("<script>");
-            response.getWriter().println("alert('로그인 후 이용하세요.');");
-            response.getWriter().println("location.href = '/login'");
-            response.getWriter().println("</script>");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);//401
             return;
         }
         super.service(request, response);

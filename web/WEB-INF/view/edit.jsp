@@ -246,19 +246,12 @@
             data: formData
         }).done(function (result) {
             console.log('success');
-            console.log('result: ' + result);
-            if (result == 0) {
+            alert('수정 성공');
+            window.location = document.referrer;//이전 페이지로 돌아가면서 새로고침
+        }).fail(function (e) {
+            if(e.status == 500) {
                 alert('수정 실패');
-            } else if (result == 1) {
-                alert('수정 성공');
-                window.location = document.referrer;//이전 페이지로 돌아가면서 새로고침
-            } else {
-                alert('업로드 실패');
             }
-
-        }).fail(function () {
-            console.log('fail');
-            alert('수정 실패');
         });
     }
 

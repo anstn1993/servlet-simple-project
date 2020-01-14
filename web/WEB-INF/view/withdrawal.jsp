@@ -83,17 +83,52 @@
            회원탈퇴를 하시게 되면 그동안 회원님이 업로드한 게시물과 댓글 및 팔로잉, 팔로워에 대한 정보가 모두 사라집니다. 그래도 탈퇴를 하시겠습니까?
        </div>
         <form action="/user/withdrawal" method="post">
-            <input type="hidden" name="id" value="${sessionScope.id}">
+            <input id="user_id" type="hidden" name="id" value="${sessionScope.id}">
+            <input id="profile" type="hidden" name="profile" value="${sessionScope.profile}">
             <div class="form-group">
                 <input id="agree" type="checkbox">
                 <label for="agree">네, 탈퇴하겠습니다.</label>
             </div>
             <div class="form-group">
-                <input class="btn btn-danger" type="submit" value="탈퇴">
+                <input id="withdrawl_btn" class="btn btn-danger" type="submit" value="탈퇴">
             </div>
         </form>
 
     </div>
 </div>
 </body>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#withdrawl_btn').on('click', function(e) {
+            e.preventDefault();
+            if($('input:checkbox[id="agree"]').is(':checked')) {
+                $.ajax({
+                    type:'DELETE',
+                    url:'/user/withdrawal',
+                    data:{
+                        'userId':$('#user_id').val(),
+                        'profile':$('#profile').val()
+                    },
+                    statusCode:{
+                        200:function () {
+                            alert('회원탈퇴가 완료되었습니다.');
+                            location.href="/";
+                        },
+                        412:function () {
+                            alert('허용되지 않은 접근 입니다.');
+                        },
+                        400:function() {
+                            alert('유효하지 않은 접근 입니다.');
+                        },
+                        500:function () {
+                            alert('서버에 문제가 생겼습니다. 잠시 후 다시 시도해주세요.');
+                        }
+                    }
+                });
+            }else {
+                alert('체크박스에 체크를 해주세요.');
+            }
+        });
+    });
+</script>
 </html>

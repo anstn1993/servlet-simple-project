@@ -138,10 +138,8 @@
                     url: '/join/check',
                     type: 'POST',//전송방식 post
                     data: {
-                        "jsonData": JSON.stringify({
-                            "type": "account",
-                            "value": account
-                        })
+                        'type': 'account',
+                        'value': account
                     }
                     // dataType: "json"
                 }
@@ -164,7 +162,7 @@
                 console.log("account check connection fail");
                 $('#account_check').css({
                     'color': "red"
-                }).html("중복 확인에 실패했습니다. 인터넷 연결을 확인하세요")
+                }).html("중복 확인에 실패했습니다. 인터넷 연결을 확인하세요");
                 isAccountValid = false;
             });
         }
@@ -235,10 +233,8 @@
                     url: '/join/check',
                     type: 'POST',//전송방식 post
                     data: {
-                        "jsonData": JSON.stringify({
-                            "type": "nickname",
-                            "value": nickname
-                        })
+                        'type': 'nickname',
+                        'value': nickname
                     }//form태그 안에 있는 여러 태그들의 value값들을 담아서 전달.
                 }
             ).done(function (result) {
@@ -343,26 +339,27 @@
             }
         });
 
-        $('#submit').on('click', function () {
+        $('#submit').on('click', function (e) {
             if (isAccountValid && isPasswordValid && isNameValid && isNicknameValid && isEmailValid) {
-                // $.ajax({
-                //     url: '/join',
-                //     type: 'POST',
-                //     data: {
-                //         "userData": JSON.stringify({
-                //             "account": $('#account').val(),
-                //             "password": $('#password').val(),
-                //             "name": $('#name').val(),
-                //             "nickname": $('#nickname').val(),
-                //             "email": $('#email').val()
-                //         })
-                //     }
-                // }).done(function(result){
-                //     alert('회원가입에 성공하였습니다. 이메일 인증을 하셔야 로그인을 하실 수 있습니다.');
-                // }).fail(function(){
-                //     alert('오류: 회원가입 실패');
-                // });
-                return true;
+                e.preventDefault();
+                $.ajax({
+                    url: '/join',
+                    type: 'POST',
+                    data: {
+                        "account": $('#account').val(),
+                        "password": $('#password').val(),
+                        "name": $('#name').val(),
+                        "nickname": $('#nickname').val(),
+                        "email": $('#email').val()
+                    }
+                }).done(function (result) {
+                    alert('회원가입에 성공하였습니다. 이메일 인증을 하셔야 로그인을 하실 수 있습니다.');
+                    location.href = '/join/notify-emailauth';
+                }).fail(function (e) {
+                    if (e.status == 500) {
+                        alert('500 오류: 서버 문제로 인해 가입에 싫패했습니다. 잠시 후 다시 시도해 주세요.');
+                    }
+                });
             } else {
                 alert('회원가입을 하실 수 없습니다. 항목을 유효하게 입력했는지 확인해주세요.');
                 return false;//새로고침 방지

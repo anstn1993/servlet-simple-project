@@ -3,10 +3,15 @@ package com.moonsoo.DAO;
 import com.moonsoo.DTO.PostDTO;
 import com.moonsoo.DTO.PostImageDTO;
 import com.moonsoo.model.Post;
+import com.moonsoo.util.ConnectionPool;
 import com.moonsoo.util.Mysql;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,38 +32,56 @@ public class PostDAO {
 
     //게시물 업로드시 게시물 삽입
     public int insert(final PostDTO postDTO, final PostImageDTO postImageDTO) {//0:실패, 1:성공, 2:에러
-        String url = Mysql.getInstance().getUrl();
+//        String url = Mysql.getInstance().getUrl();
         String sql = "insert into post (user_id, article) values (?, ?)";
-        int postResult = 0;
-        int postImageResult = 0;
+
+        Connection con = null;
+        PreparedStatement pst = null;
+        Statement st = null;
+        ResultSet rs = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
-            PreparedStatement pst = con.prepareStatement(sql);
-            Statement st = con.createStatement();
+//            Class.forName("com.mysql.cj.jdbc.Driver");
+//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
+            con = ConnectionPool.getConnection();//커넥션 풀에서 커넥션 객체를 불러옴
+
+            pst = con.prepareStatement(sql);
+
             pst.setInt(1, postDTO.getUserId());
-            pst.setString(2, (postDTO.getArticle() == null) ? null : postDTO.getArticle());
-            postResult = pst.executeUpdate();
+            pst.setString(2, postDTO.getArticle());
+            pst.executeUpdate();
 
             sql = "select id from post order by id desc limit 0, 1";//추가한 게시물의 id를 가져와서 post_image테이블에서 post_id에 넣어준다.
             int postId = 0;
-            ResultSet rs = st.executeQuery(sql);
+            st = con.createStatement();
+            rs = st.executeQuery(sql);
             if (rs.next()) {
                 postId = rs.getInt("id");
             }
 
             postImageDTO.setPostId(postId);
 
-            postImageResult = PostImageDAO.getInstance().insert(postImageDTO);//post_image테이블에 레코드 추가
+            sql = "insert into post_image (post_id, file_name) values (?, ?)";
+            pst = con.prepareStatement(sql);
+            for (int i = 0; i < postImageDTO.getFileNames().size(); i++) {
+                pst.setInt(1, postImageDTO.getPostId());
+                pst.setString(2, postImageDTO.getFileNames().get(i));
+                pst.executeUpdate();
+            }
 
-
-            pst.close();
-            con.close();
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return 2;
+        } finally {
+            if(st != null)
+                try { st.close(); } catch (SQLException e) { e.printStackTrace(); }
+            if(pst != null)
+                try { pst.close(); } catch (SQLException e) { e.printStackTrace(); }
+            if(rs != null)
+                try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            if(con != null)
+                try { con.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
-        return (postResult != 0 && postImageResult != 0) ? 1 : 0;
+        return 1;
     }
 
     public JSONObject getPost(int postId) {//로그아웃 상태에서 요청
@@ -72,12 +95,18 @@ public class PostDAO {
         List<String> images = new ArrayList<>();
         JSONArray comments = new JSONArray();//댓글 데이터 json 객체를 담을 json array
 
+        Connection con = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
-            PreparedStatement pst = con.prepareStatement(sql);
+//            Class.forName("com.mysql.cj.jdbc.Driver");
+//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
+            con = ConnectionPool.getConnection();
+
+
+            pst = con.prepareStatement(sql);
             pst.setInt(1, postId);
-            ResultSet rs = pst.executeQuery();
+            rs = pst.executeQuery();
             if (rs.next()) {
                 postData.put("userId", rs.getInt("user_id"));
                 postData.put("article", rs.getString("article"));
@@ -90,7 +119,7 @@ public class PostDAO {
             pst = con.prepareStatement(sql);
             pst.setInt(1, postId);
             rs = pst.executeQuery();
-            if(rs.next()) {
+            if (rs.next()) {
                 postData.put("likeCount", rs.getInt("like_count"));
             }
 
@@ -98,8 +127,8 @@ public class PostDAO {
             pst = con.prepareStatement(sql);
             pst.setInt(1, postId);
             rs = pst.executeQuery();
-            while(rs.next()) {
-                    images.add(rs.getString("file_name"));
+            while (rs.next()) {
+                images.add(rs.getString("file_name"));
             }
 
             sql = "select comment.id, comment.post_id, comment.user_id, user.nickname, user.image, comment.comment, comment.date from comment join user on comment.user_id=user.id where post_id=?";
@@ -121,21 +150,25 @@ public class PostDAO {
             postData.put("images", images);
             postData.put("size", images.size());
             postData.put("comments", comments);
-            rs.close();
-            pst.close();
-            con.close();
-            return postData;
-        } catch (ClassNotFoundException | SQLException | ParseException e) {
+
+        } catch (SQLException | ParseException e) {
             e.printStackTrace();
             return null;
+        } finally {
+            if(rs != null)
+                try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            if(pst != null)
+                try { pst.close(); } catch (SQLException e) { e.printStackTrace(); }
+            if(con != null)
+                try { con.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
-
+        return postData;
     }
 
 
     public JSONObject getPost(int loginUserId, int postId) {//로그인 상태에서 요청
 
-        String url = Mysql.getInstance().getUrl();
+//        String url = Mysql.getInstance().getUrl();
         String sql = "select post.user_id as user_id, article, date, like_post.post_id as like_status from post left join like_post on post.id=like_post.post_id and like_post.user_id=? where post.id=?";
 
         JSONObject postData = new JSONObject();
@@ -144,13 +177,19 @@ public class PostDAO {
         List<String> images = new ArrayList<>();
         JSONArray comments = new JSONArray();//댓글 데이터 json 객체를 담을 json array
 
+        Connection con = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
-            PreparedStatement pst = con.prepareStatement(sql);
+//            Class.forName("com.mysql.cj.jdbc.Driver");
+//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
+            con = ConnectionPool.getConnection();
+
+            pst = con.prepareStatement(sql);
             pst.setInt(1, loginUserId);
             pst.setInt(2, postId);
-            ResultSet rs = pst.executeQuery();
+
+            rs = pst.executeQuery();
             if (rs.next()) {
                 postData.put("userId", rs.getInt("user_id"));
                 postData.put("article", rs.getString("article"));
@@ -165,7 +204,7 @@ public class PostDAO {
             pst = con.prepareStatement(sql);
             pst.setInt(1, postId);
             rs = pst.executeQuery();
-            if(rs.next()) {
+            if (rs.next()) {
                 postData.put("likeCount", rs.getInt("like_count"));
             }
 
@@ -173,11 +212,11 @@ public class PostDAO {
             pst = con.prepareStatement(sql);
             pst.setInt(1, postId);
             rs = pst.executeQuery();
-            while(rs.next()) {
-                    images.add(rs.getString("file_name"));
+            while (rs.next()) {
+                images.add(rs.getString("file_name"));
             }
 
-            sql = "select comment.id, comment.post_id, comment.user_id, user.nickname, user.image, comment.comment, comment.date from comment join user on comment.user_id=user.id where post_id=?";
+            sql = "select comment.id, comment.post_id, comment.user_id, user.nickname, user.image, comment.comment, comment.date from comment join user on comment.user_id=user.id where post_id=? limit 0, 4";
             pst = con.prepareStatement(sql);
             pst.setInt(1, postId);
             rs = pst.executeQuery();
@@ -196,52 +235,19 @@ public class PostDAO {
             postData.put("images", images);
             postData.put("size", images.size());
             postData.put("comments", comments);
-            rs.close();
-            pst.close();
-            con.close();
-            return postData;
-        } catch (ClassNotFoundException | SQLException | ParseException e) {
+
+        } catch (SQLException | ParseException e) {
             e.printStackTrace();
             return null;
+        } finally {
+            if(rs != null)
+                try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            if(pst != null)
+                try { pst.close(); } catch (SQLException e) { e.printStackTrace(); }
+            if(con != null)
+                try { con.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
-
-    }
-
-    //게시물 모델 리스트를 가져온다. 매개변수로 전달된 인덱스로부터 18개씩(로그아웃 상태에서 실행)
-    public List<Post> getPosts(int startIndex) {
-
-        List<Post> posts = new ArrayList<>();
-
-        String url = Mysql.getInstance().getUrl();
-        String sql = "select user.id, user.nickname, user.image, post.id as post_id, post.article, post.date, pi.file_name from post, (select*from post_image)pi, (select*from user)user" +
-                " where post.user_id=user.id and post.id=pi.post_id group by post_id order by post_id desc limit ?, 18";
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
-            PreparedStatement pst = con.prepareStatement(sql);
-            pst.setInt(1, startIndex);
-            ResultSet rs = pst.executeQuery();
-            while (rs.next()) {
-                int userId = rs.getInt("id");
-                String nickname = rs.getString("nickname");
-                String profile = rs.getString("image");
-                String article = rs.getString("article");
-                int postId = rs.getInt("post_id");
-                Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("date"));
-                String fileName = rs.getString("file_name");
-                posts.add(new Post(userId, postId, nickname, profile, article, fileName, beforeTime(date), false));
-            }
-            rs.close();
-            pst.close();
-            con.close();
-
-
-            return posts;
-
-        } catch (ClassNotFoundException | SQLException | ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return postData;
     }
 
     //게시물 모델 리스트를 가져온다. 매개변수로 전달된 인덱스로부터 18개씩(로그인 상태에서 실행)
@@ -249,22 +255,30 @@ public class PostDAO {
 
         List<Post> posts = new ArrayList<>();
 
-        String url = Mysql.getInstance().getUrl();
-        String sql = "select user.id, user.nickname, user.image, post.id as post_id, post.article, post.date, post_image.file_name, like_post.post_id as like_status from post " +
+//        String url = Mysql.getInstance().getUrl();
+        String sql = "select user.id, user.nickname, user.image, post.id as post_id, post.article, post.date, post_image.file_name, like_post.post_id as like_status " +
+                "from post " +
                 "left join user on post.user_id=user.id " +
                 "left join post_image on post.id=post_image.post_id " +
                 "left join like_post on post.id=like_post.post_id and like_post.user_id=? " +
                 "group by post_id " +
                 "order by post_id desc " +
-                "limit ?, 18";
+                "limit ?, 6";
+
+        Connection con = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
-            PreparedStatement pst = con.prepareStatement(sql);
+//            Class.forName("com.mysql.cj.jdbc.Driver");
+//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
+
+            con = ConnectionPool.getConnection();//커넥션 풀에서 커넥션 객체를 하나 가져온다.
+
+            pst = con.prepareStatement(sql);
             pst.setInt(1, loginUserId);
             pst.setInt(2, startIndex);
-            ResultSet rs = pst.executeQuery();
+            rs = pst.executeQuery();
             while (rs.next()) {
                 int userId = rs.getInt("id");
                 String nickname = rs.getString("nickname");
@@ -277,32 +291,42 @@ public class PostDAO {
                 if (rs.getString("like_status") != null) likeStatus = true;
                 posts.add(new Post(userId, postId, nickname, profile, article, fileName, beforeTime(date), likeStatus));
             }
-            rs.close();
-            pst.close();
-            con.close();
-
-
-            return posts;
-
-        } catch (ClassNotFoundException | SQLException | ParseException e) {
+        } catch (SQLException | ParseException e) {
             e.printStackTrace();
             return null;
+        }finally {
+            if(rs != null) {
+                try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+            if(pst != null) {
+                try { pst.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+            if(con != null) {
+                try { con.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
         }
+        return posts;
     }
 
-
+    //페이징으로 다음 게시물을 가져올 때 호출되는 메소드
     public List<Post> getUserPosts(int userId, int startIndex) {
         List<Post> posts = new ArrayList<>();
         String url = Mysql.getInstance().getUrl();
         String sql = "select user.id, post.id as post_id, post.article, pi.file_name, post.date from post, (select*from post_image)pi, (select*from user)user" +
-                " where post.user_id=user.id and post.id=pi.post_id and user.id=? group by post_id order by post_id desc limit ?, 18";
+                " where post.user_id=user.id and post.id=pi.post_id and user.id=? group by post_id order by post_id desc limit ?, 6";
+
+        Connection con = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
-            PreparedStatement pst = con.prepareStatement(sql);
+//            Class.forName("com.mysql.cj.jdbc.Driver");
+//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
+            con = ConnectionPool.getConnection();
+
+            pst = con.prepareStatement(sql);
             pst.setInt(1, userId);
             pst.setInt(2, startIndex);
-            ResultSet rs = pst.executeQuery();
+            rs = pst.executeQuery();
             while (rs.next()) {
                 int postId = rs.getInt("post_id");
                 String article = rs.getString("article");
@@ -310,91 +334,274 @@ public class PostDAO {
                 Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("date"));
                 posts.add(new Post(userId, postId, article, fileName, beforeTime(date)));
             }
-            rs.close();
-            pst.close();
-            con.close();
-
-
-            return posts;
-
-        } catch (ClassNotFoundException | SQLException | ParseException e) {
+        } catch (SQLException | ParseException e) {
             e.printStackTrace();
             return null;
+        } finally {
+            if(rs != null) {
+                try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+            if(pst != null) {
+                try { pst.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+            if(con != null) {
+                try { con.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
         }
+        return posts;
     }
+
+    public JSONArray getNextPosts(int loginUserId, int lastPostId) {
+        JSONArray posts = new JSONArray();
+
+//        String url = Mysql.getInstance().getUrl();
+        String sql = "select count(*) as start_index from post where id>=?";
+
+
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        Connection con = null;
+
+        try {
+//            Class.forName("com.mysql.cj.jdbc.Driver");
+//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
+            con = ConnectionPool.getConnection();//커넥션 풀에서 커넥션 객체를 하나 가져온다.
+
+            int startIndex = 0;//게시물 테이블 레코드의 시작 index
+            if (lastPostId != 0) {
+                pst = con.prepareStatement(sql);
+                pst.setInt(1, lastPostId);
+                rs = pst.executeQuery();
+                if (rs.next()) {
+                    startIndex = rs.getInt("start_index");
+                }
+            }
+
+            sql = "select user.id, user.nickname, user.image, post.id as post_id, post.article, post.date, post_image.file_name, like_post.post_id as like_status " +
+                    "from post " +
+                    "left join user on post.user_id=user.id " +
+                    "left join post_image on post.id=post_image.post_id " +
+                    "left join like_post on post.id=like_post.post_id and like_post.user_id=? " +
+                    "group by post_id " +
+                    "order by post_id desc " +
+                    "limit ?, 6";
+            pst = con.prepareStatement(sql);
+            pst.setInt(1, loginUserId);
+            pst.setInt(2, startIndex);
+
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                JSONObject post = new JSONObject();
+                post.put("userId", rs.getInt("id"));
+                post.put("nickname", rs.getString("nickname"));
+                post.put("profile", rs.getString("image"));
+                post.put("article", rs.getString("article"));
+                post.put("postId", rs.getInt("post_id"));
+                post.put("profile", rs.getString("image"));
+                Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("date"));
+                post.put("time", beforeTime(date));
+                post.put("fileName", rs.getString("file_name"));
+                post.put("likeStatus", rs.getString("like_status") != null);
+                posts.add(post);
+            }
+
+        } catch (SQLException | ParseException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            if(rs != null) {
+                try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+            if(pst != null) {
+                try { pst.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+            if(con != null) {
+                try { con.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+        }
+        return posts;
+    }
+
+    //페이징으로 다음 게시물을 가져올 때 호출되는 메소드(사용자 페이지)
+    public JSONArray getNextPostsInUserPage(int userId, int lastPostId) {
+        JSONArray posts = new JSONArray();
+        //        String url = Mysql.getInstance().getUrl();
+        String sql = null;
+
+
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        Connection con = null;
+
+        try {
+//            Class.forName("com.mysql.cj.jdbc.Driver");
+//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
+            con = ConnectionPool.getConnection();//커넥션 풀에서 커넥션 객체를 하나 가져온다.
+
+            int startIndex = 0;//게시물 테이블 레코드의 시작 index
+            if (lastPostId != 0) {
+                sql = "select count(*) as start_index from post where user_id=? and id>=?";
+                pst = con.prepareStatement(sql);
+                pst.setInt(1, userId);
+                pst.setInt(2, lastPostId);
+                rs = pst.executeQuery();
+                if (rs.next()) {
+                    startIndex = rs.getInt("start_index");
+                }
+            }
+
+            sql = "select user.nickname, user.image as profile, post.id as post_id, post.article, pi.file_name, post.date from post, (select*from post_image)pi, (select*from user)user" +
+                    " where post.user_id=user.id and post.id=pi.post_id and user.id=? group by post_id order by post_id desc limit ?, 6";
+            pst = con.prepareStatement(sql);
+            pst.setInt(1, userId);
+            pst.setInt(2, startIndex);
+
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                JSONObject post = new JSONObject();
+                post.put("userId", userId);
+                post.put("nickname", rs.getString("nickname"));
+                post.put("profile", rs.getString("profile"));
+                post.put("postId", rs.getInt("post_id"));
+                post.put("article", rs.getString("article"));
+                post.put("fileName", rs.getString("file_name"));
+                Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("date"));
+                post.put("time", beforeTime(date));
+                posts.add(post);
+            }
+
+        } catch (SQLException | ParseException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            if(rs != null) {
+                try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+            if(pst != null) {
+                try { pst.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+            if(con != null) {
+                try { con.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+        }
+
+        return posts;
+    }
+
 
     //게시물 상세보기시 게시물의 모든 이미지를 가져오는 메소드
     public List<String> getPostImages(int postId) {
         List<String> images = new ArrayList<>();
 
-        String url = Mysql.getInstance().getUrl();
+//        String url = Mysql.getInstance().getUrl();
         String sql = "select file_name from post_image where post_id=?";
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
 
-            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
-            PreparedStatement pst = con.prepareStatement(sql);
+        Connection con = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        try {
+//            Class.forName("com.mysql.cj.jdbc.Driver");
+
+//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
+            con = ConnectionPool.getConnection();
+            pst = con.prepareStatement(sql);
             pst.setInt(1, postId);
-            ResultSet rs = pst.executeQuery();
+            rs = pst.executeQuery();
             while (rs.next()) {
                 String fileName = rs.getString("file_name");
                 images.add(fileName);
             }
-            rs.close();
-            pst.close();
-            con.close();
-            return images;
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        } finally {
+            if(rs != null) {
+                try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+            if(pst != null) {
+                try { pst.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+            if(con != null) {
+                try { con.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
         }
+        return images;
     }
 
     //게시물 작성자 id를 반환하는 메소드
     public int getUserId(int postId) {
         int userId = 0;//사용자 id
-        String url = Mysql.getInstance().getUrl();
+//        String url = Mysql.getInstance().getUrl();
         String sql = "select user_id from post where id=?";
+
+        Connection con = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
-            PreparedStatement pst = con.prepareStatement(sql);
+//            Class.forName("com.mysql.cj.jdbc.Driver");
+//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
+            con = ConnectionPool.getConnection();
+
+            pst = con.prepareStatement(sql);
             pst.setInt(1, postId);
-            ResultSet rs = pst.executeQuery();
+
+            rs = pst.executeQuery();
             if (rs.next()) {
                 userId = rs.getInt("user_id");
             }
-            rs.close();
-            pst.close();
-            con.close();
-            return userId;
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return 0;
+        } finally {
+            if(rs != null) {
+                try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+            if(pst != null) {
+                try { pst.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+            if(con != null) {
+                try { con.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
         }
+        return userId;
     }
 
     public String getArticle(int postId) {
         String article = null;
-        String url = Mysql.getInstance().getUrl();
+//        String url = Mysql.getInstance().getUrl();
         String sql = "select article from post where id=?";
+
+        Connection con = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
-            PreparedStatement pst = con.prepareStatement(sql);
+//            Class.forName("com.mysql.cj.jdbc.Driver");
+//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
+            con = ConnectionPool.getConnection();
+
+            pst = con.prepareStatement(sql);
             pst.setInt(1, postId);
-            ResultSet rs = pst.executeQuery();
+
+            rs = pst.executeQuery();
             if (rs.next()) {
                 article = rs.getString("article");
             }
-            rs.close();
-            pst.close();
-            con.close();
-            return article;
-        } catch (ClassNotFoundException | SQLException e) {
+
+        } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        } finally {
+            if(rs != null) {
+                try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+            if(pst != null) {
+                try { pst.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+            if(con != null) {
+                try { con.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
         }
+        return article;
     }
 
     public String getUploadTime(int postId) {
@@ -424,51 +631,174 @@ public class PostDAO {
 
     //게시물 수정 update
     public int update(int postId, String article, List<String> newFiles, List<String> transferredExistingFiles) {
-        int postResult = 0;//post테이블 쿼리 결과
-        int imageDeleteResult = 0;//post_image테이블에서 기존 이미지 파일 명을 삭제하는 쿼리 결과
-        int imageUpdateResult = 0;//post_image테이블에 새로운 이미지 파일 명을 삽입하는 쿼리 결과
-        String url = Mysql.getInstance().getUrl();
+        int result = 1;//post테이블 쿼리 결과
         String sql = "update post set article=? where id=?";
+
+        Connection con = null;
+        PreparedStatement pst = null;
+
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
-            PreparedStatement pst = con.prepareStatement(sql);
+            con = ConnectionPool.getConnection();
+            con.setAutoCommit(false);
+
+            pst = con.prepareStatement(sql);
             pst.setString(1, article);
             pst.setInt(2, postId);
-            postResult = pst.executeUpdate();
+            pst.executeUpdate();
 
-            imageDeleteResult = PostImageDAO.getInstance().delete(postId, transferredExistingFiles);//기존 이미지 파일명 테이블에서 삭제
-            imageUpdateResult = PostImageDAO.getInstance().update(postId, newFiles);
 
-            pst.close();
-            con.close();
+            int count = transferredExistingFiles.size();
+            switch (count) {
+                case 0:
+                    sql = "delete from post_image where post_id=?";
+                    pst = con.prepareStatement(sql);
+                    pst.setInt(1, postId);
+                    break;
+                case 1:
+                    sql = "delete from post_image where post_id=? and file_name<>?";
+                    pst = con.prepareStatement(sql);
+                    pst.setInt(1, postId);
+                    pst.setString(2, transferredExistingFiles.get(0));
+                    break;
+                case 2:
+                    sql = "delete from post_image where post_id=? and file_name<>? and file_name<>?";
+                    pst = con.prepareStatement(sql);
+                    pst.setInt(1, postId);
+                    pst.setString(2, transferredExistingFiles.get(0));
+                    pst.setString(3, transferredExistingFiles.get(1));
+                    break;
+                case 3:
+                    sql = "delete from post_image where post_id=? and file_name<>? and file_name<>? and file_name<>?";
+                    pst = con.prepareStatement(sql);
+                    pst.setInt(1, postId);
+                    pst.setString(2, transferredExistingFiles.get(0));
+                    pst.setString(3, transferredExistingFiles.get(1));
+                    pst.setString(4, transferredExistingFiles.get(2));
+                    break;
+                case 4:
+                    sql = "delete from post_image where post_id=? and file_name<>? and file_name<>? and file_name<>? and file_name<>?";
+                    pst = con.prepareStatement(sql);
+                    pst.setInt(1, postId);
+                    pst.setString(2, transferredExistingFiles.get(0));
+                    pst.setString(3, transferredExistingFiles.get(1));
+                    pst.setString(4, transferredExistingFiles.get(2));
+                    pst.setString(5, transferredExistingFiles.get(3));
+                    break;
+                case 5:
+                    sql = "delete from post_image where post_id=? and file_name<>? and file_name<>? and file_name<>? and file_name<>? and file_name<>?";
+                    pst = con.prepareStatement(sql);
+                    pst.setInt(1, postId);
+                    pst.setString(2, transferredExistingFiles.get(0));
+                    pst.setString(3, transferredExistingFiles.get(1));
+                    pst.setString(4, transferredExistingFiles.get(2));
+                    pst.setString(5, transferredExistingFiles.get(3));
+                    pst.setString(6, transferredExistingFiles.get(4));
+                    break;
+                case 6:
+                    sql = "delete from post_image where post_id=? and file_name<>? and file_name<>? and file_name<>? and file_name<>? and file_name<>? and file_name<>?";
+                    pst = con.prepareStatement(sql);
+                    pst.setInt(1, postId);
+                    pst.setString(2, transferredExistingFiles.get(0));
+                    pst.setString(3, transferredExistingFiles.get(1));
+                    pst.setString(4, transferredExistingFiles.get(2));
+                    pst.setString(5, transferredExistingFiles.get(3));
+                    pst.setString(6, transferredExistingFiles.get(4));
+                    pst.setString(7, transferredExistingFiles.get(5));
+                    break;
+            }
+            pst.executeUpdate();
 
-            return (postResult == 1 && imageDeleteResult != -1 && imageUpdateResult != -1) ? 1 : 0;
-        } catch (ClassNotFoundException | SQLException e) {
+            sql = "insert into post_image (post_id, file_name) values (?, ?)";pst = con.prepareStatement(sql);
+            pst.setInt(1, postId);
+            for (String newFile : newFiles) {
+                pst.setString(2, newFile);
+                pst.executeUpdate();
+            }
+
+            con.commit();
+            con.setAutoCommit(true);
+
+        } catch (SQLException e) {
             e.printStackTrace();
-            return 2;
+            try {
+                con.rollback();
+                con.setAutoCommit(true);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+
+            result = -1;
+        } finally {
+
+            if(pst != null) {
+                try { pst.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+            if(con != null) {
+                try { con.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
         }
+        return result;
     }
 
     public int deletePost(int postId) {
         int result = -1;
-        String url = Mysql.getInstance().getUrl();
+//        String url = Mysql.getInstance().getUrl();
         String sql = "delete from post where id=?";
+
+        Connection con = null;
+        PreparedStatement pst = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
-            PreparedStatement pst = con.prepareStatement(sql);
+//            Class.forName("com.mysql.cj.jdbc.Driver");
+//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
+            con = ConnectionPool.getConnection();
+            pst = con.prepareStatement(sql);
             pst.setInt(1, postId);
             result = pst.executeUpdate();
 
-            pst.close();
-            con.close();
-
-            return result;
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return -1;
+        } finally {
+            if(pst != null) {
+                try { pst.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+            if(con != null) {
+                try { con.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
         }
+        return result;
+    }
+
+    public int getPostCount(int id) {
+        int postCount = 0;
+        String sql = "select count(*) as post_count from post where user_id=?";
+        Connection con = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        try {
+            con = ConnectionPool.getConnection();
+            pst = con.prepareStatement(sql);
+            pst.setInt(1, id);
+            rs = pst.executeQuery();
+
+            if(rs.next()) {
+                postCount = rs.getInt("post_count");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if(rs != null) {
+                try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+            if(pst != null) {
+                try { pst.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+            if(con != null) {
+                try { con.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+        }
+
+        return postCount;
     }
 
     //업로드된 게시물이 몇 분 전에 만들어진 게시물인지를 리턴해주는 메소드
@@ -491,7 +821,7 @@ public class PostDAO {
 
 //        초       분   시
 //        1000    60  60
-        gap = (long) (gap / 1000);
+        gap = gap / 1000;
         long hour = gap / 3600;
         gap = gap % 3600;
         long min = gap / 60;
@@ -511,6 +841,7 @@ public class PostDAO {
         return ret;
 
     }
+
 
 
 }

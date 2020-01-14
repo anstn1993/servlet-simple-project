@@ -19,7 +19,7 @@ public class LikeController extends HttpServlet {
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         if(request.getSession().getAttribute("id") == null) {//로그인이 안 된 경우
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);//403
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);//401
             return;
         }
 
@@ -36,12 +36,12 @@ public class LikeController extends HttpServlet {
             userId = Integer.parseInt(userId_);
         }
         else {
-            response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);//406
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//400
             return;
         }
 
         if((int)request.getSession().getAttribute("id") != userId) {
-            response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);//406
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);//401
             return;
         }
 
@@ -58,17 +58,20 @@ public class LikeController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
+        String loginUserId_ = request.getParameter("loginUserId");
         String postId_ = request.getParameter("postId");
         int postId = 0;
-        if(postId_ != null && !postId_.equals("")) {
+        int loginUserId = 0;
+        if(postId_ != null && !postId_.equals("") && loginUserId_ != null && !loginUserId_.equals("")) {
             postId = Integer.parseInt(postId_);
+            loginUserId = Integer.parseInt(loginUserId_);
         }
         else {
-            response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);//406
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//400
             return;
         }
 
-        JSONArray likeList = LikeDAO.getInstance().getLikeList(postId);
+        JSONArray likeList = LikeDAO.getInstance().getLikeList(loginUserId, postId);
 
         if(likeList != null) {
             response.getWriter().print(likeList.toString());
@@ -90,12 +93,12 @@ public class LikeController extends HttpServlet {
             userId = Integer.parseInt(userId_);
         }
         else {
-            response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);//406
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//400
             return;
         }
 
         if((int)request.getSession().getAttribute("id") != userId) {
-            response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);//406
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);//401
             return;
         }
 

@@ -5,14 +5,12 @@ import com.moonsoo.DAO.PostDAO;
 import com.moonsoo.DAO.UserDAO;
 import com.moonsoo.model.Post;
 import com.moonsoo.model.User;
-import org.json.simple.JSONObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
@@ -20,7 +18,7 @@ import java.util.List;
 public class UserPageController extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if(request.getSession().getAttribute("id") == null) {
+        if (request.getSession().getAttribute("id") == null) {
             response.setCharacterEncoding("UTF-8");
             response.setContentType("text/html;charset=UTF-8");
             response.getWriter().println("<script>");
@@ -40,11 +38,11 @@ public class UserPageController extends HttpServlet {
 
         String id_ = request.getParameter("id");
         int id = 0;
-        if(id_ != null && !id_.equals("")){
+        if (id_ != null && !id_.equals("")) {
             id = Integer.parseInt(id_);
         }
 
-        if(id <= 1) {//1번은 관리자 id
+        if (id <= 1) {//1번은 관리자 id
             response.setCharacterEncoding("UTF-8");
             response.setContentType("text/html;charset=UTF-8");
             response.getWriter().println("<script>");
@@ -56,14 +54,20 @@ public class UserPageController extends HttpServlet {
 
         User user = UserDAO.getInstance().getUserData(id);
         List<Post> posts = PostDAO.getInstance().getUserPosts(id, 0);
-        int followingId = (int)request.getSession().getAttribute("id");
+        int followingId = (int) request.getSession().getAttribute("id");
         boolean followStatus = FollowDAO.getInstance().getFollowStatus(followingId, id);
+        int followingCount = FollowDAO.getInstance().getFollowingCount(id);
+        int followerCount = FollowDAO.getInstance().getFollowerCount(id);
+        int postCount = PostDAO.getInstance().getPostCount(id);
 
         request.setAttribute("id", id);
         request.setAttribute("user", user);
         request.setAttribute("posts", posts);
-        request.setAttribute("size", posts.size());
+        request.setAttribute("postCount", postCount);
         request.setAttribute("followStatus", followStatus);
+        request.setAttribute("followingCount", followingCount);
+        request.setAttribute("followerCount", followerCount);
+        request.setAttribute("lastPostId", (posts.size() != 0) ? posts.get(posts.size() - 1).getPostId() : 0);
         request.getRequestDispatcher("/WEB-INF/view/userpage.jsp").forward(request, response);
     }
 }

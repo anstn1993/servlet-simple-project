@@ -2,6 +2,7 @@ package com.moonsoo.controller;
 
 import com.moonsoo.DAO.CommentDAO;
 import com.moonsoo.model.Comment;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import javax.servlet.ServletException;
@@ -13,13 +14,13 @@ import javax.servlet.http.Part;
 import java.io.IOException;
 import java.util.Collection;
 
-@WebServlet("/comment")
+@WebServlet(urlPatterns = {"/comment", "/comments"})
 public class CommentController extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getSession().getAttribute("id") == null) {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);//로그인을 하지 않았기 때문에 403 에러를 던져준다.
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);//401
             return;
         }
         super.service(request, response);
@@ -36,7 +37,7 @@ public class CommentController extends HttpServlet {
         int result = CommentDAO.getInstance().insert(comment);
 
         if (result != 1) {//db에 저장한 후 댓글 데이터를 가져오는 데 실패한 경우
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
             return;
         }
 
@@ -52,7 +53,37 @@ public class CommentController extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String uri = request.getRequestURI();
+        if(uri.equals("/comments")) {
+            response.setContentType("text/html;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            String lastCommentId_ = request.getParameter("lastCommentId");
+            String postId_ = request.getParameter("postId");
+            int lastCommentId = 0;
+            int postId = 0;
+            if(lastCommentId_ != null && !lastCommentId_.equals("") && postId_ != null && !postId_.equals("")) {
+                lastCommentId = Integer.parseInt(lastCommentId_);
+                postId = Integer.parseInt(postId_);
+            }
+            else {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//400
+                return;
+            }
 
+            JSONArray comments = CommentDAO.getInstance().getNextComments(postId, lastCommentId);
+            if(comments == null) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
+                return;
+            }
+
+            if(comments.size() == 0) {
+                response.setStatus(HttpServletResponse.SC_NO_CONTENT);//204
+                return;
+            }
+
+            response.getWriter().print(comments);
+
+        }
     }
 
     @Override
@@ -69,12 +100,12 @@ public class CommentController extends HttpServlet {
             userId = Integer.parseInt(userId_);
         }
         else {
-            response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);//406
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//400
             return;
         }
 
         if(request.getSession().getAttribute("id") != null && userId != (int)request.getSession().getAttribute("id")) {//다른 사람의 댓글 수정 요청을 하는 경우를 차단
-            response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);//406
+            response.setStatus(HttpServletResponse.SC_PRECONDITION_FAILED);//412
             return;
         }
 
@@ -107,12 +138,12 @@ public class CommentController extends HttpServlet {
             userId = Integer.parseInt(userId_);
         }
         else {
-            response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);//406
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//400
             return;
         }
 
         if(request.getSession().getAttribute("id") != null && userId != (int)request.getSession().getAttribute("id")) {//다른 사람의 댓글 삭제 요청을 하는 경우를 차단
-            response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);//406
+            response.setStatus(HttpServletResponse.SC_PRECONDITION_FAILED);//412
             return;
         }
 

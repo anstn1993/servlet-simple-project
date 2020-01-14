@@ -16,6 +16,7 @@
       <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/javax.mail.jar!/" />
       <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/additionnal.jar!/" />
       <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/cos.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/tomcat-dbcp.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

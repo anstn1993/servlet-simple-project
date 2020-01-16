@@ -494,6 +494,11 @@ public class UserDAO {
             pst.setInt(2, userId);
             pst.executeUpdate();
 
+            sql = "delete from like_post where user_id=?";//탈퇴한 사용자의 좋아요 데이터 모두 삭제
+            pst = con.prepareStatement(sql);
+            pst.setInt(1, userId);
+            pst.executeUpdate();
+
             sql = "delete from user where id=?";//탈퇴한 사용자의 정보를 유저 테이블에서 삭제
             pst = con.prepareStatement(sql);
             pst.setInt(1, userId);

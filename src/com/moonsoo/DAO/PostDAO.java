@@ -8,10 +8,6 @@ import com.moonsoo.util.Mysql;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

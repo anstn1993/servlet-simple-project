@@ -23,24 +23,15 @@ public class UserDAO {
         return userDAO;
     }
 
-    //회원 가입 유효성 체크
-    public int joinValidationCheck() {
-        int result = 0;
-        return result;
-    }
-
     //회원가입시 유저 데이터 삽입
     public int insert(final UserDTO userDTO) {
         int id = 0;
-//        String url = Mysql.getInstance().getUrl();
         String sql = "insert into user (account, password, name, nickname, email, email_hash) values (?, ?, ?, ?, ?, ?)";
         Connection con = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
 
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
             con = ConnectionPool.getConnection();
 
             pst = con.prepareStatement(sql);
@@ -159,14 +150,11 @@ public class UserDAO {
 
     //이메일 인증 검증
     public int checkEmailAuthentication(final String account, final String code) {//0:비인증, 1:이미 인증된 상태, 2: 오류
-//        String url = Mysql.getInstance().getUrl();
         String sql = "select*from user where account =? and email_hash=?";
         Connection con = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
             con = ConnectionPool.getConnection();
 
             pst = con.prepareStatement(sql);
@@ -208,15 +196,12 @@ public class UserDAO {
 
     //사용자 정보 추출
     public UserDTO getUserData(final String account) {
-//        String url = Mysql.getInstance().getUrl();
         String sql = "select*from user where account =?";
 
         Connection con = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
             con = ConnectionPool.getConnection();
             pst = con.prepareStatement(sql);
             pst.setString(1, account);
@@ -251,15 +236,12 @@ public class UserDAO {
     }
 
     public User getUserData(int id) {
-        String url = Mysql.getInstance().getUrl();
         String sql = "select*from user where id =?";
 
         Connection con = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
             con = ConnectionPool.getConnection();
 
             pst = con.prepareStatement(sql);
@@ -293,7 +275,6 @@ public class UserDAO {
 
     //로그인 검사
     public int loginCheck(final String account, final String password) {
-//        String url = Mysql.getInstance().getUrl();
         String sql = "select*from user where account=? and password=?";
         int result = 0;
 
@@ -302,8 +283,6 @@ public class UserDAO {
         ResultSet rs = null;
 
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
 
             con = ConnectionPool.getConnection();
 
@@ -338,14 +317,11 @@ public class UserDAO {
 
     //프로필 편집시 사용자 데이터 업데이트를 해주는 메소드
     public int updateUserData(HashMap<String, String> userData) {//0: 실패  1: 성공  2: 에러
-//        String url = Mysql.getInstance().getUrl();
         String sql = "update user set name=?, nickname=?, email=?, image=?, introduce=?, email_hash=? where id=?";
         int result = 0;
         Connection con = null;
         PreparedStatement pst = null;
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
             con = ConnectionPool.getConnection();
 
             pst = con.prepareStatement(sql);
@@ -375,7 +351,6 @@ public class UserDAO {
 
     //비밀번호 변경에서 기존 비밀번호의 유효성 검사 실시하는 메소드
     public int checkOldPassword(int id, String oldPassword) {
-//        String url = Mysql.getInstance().getUrl();
         String sql = "select*from user where id=? and password=?";
         int result = 0;
 
@@ -383,8 +358,6 @@ public class UserDAO {
         PreparedStatement pst = null;
         ResultSet rs = null;
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
             con = ConnectionPool.getConnection();
 
             pst = con.prepareStatement(sql);
@@ -413,15 +386,12 @@ public class UserDAO {
     }
 
     public int updatdPassword(int id, String password) {
-//        String url = Mysql.getInstance().getUrl();
         String sql = "update user set password=? where id=?";
         int result = 0;
 
         Connection con = null;
         PreparedStatement pst = null;
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
             con = ConnectionPool.getConnection();
 
             pst = con.prepareStatement(sql);

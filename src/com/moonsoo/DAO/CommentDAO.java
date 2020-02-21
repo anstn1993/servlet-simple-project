@@ -24,7 +24,6 @@ public class CommentDAO {
 
     //댓글 업로드시 게시물 삽입
     public int insert(final Comment comment) {//0:실패, 1:성공, 2:에러
-//        String url = Mysql.getInstance().getUrl();
         String sql = "insert into comment (post_id, user_id, comment) values (?, ?, ?)";
         int result = 0;
 
@@ -33,8 +32,7 @@ public class CommentDAO {
         Statement st = null;
         ResultSet rs = null;
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
+//
             con = ConnectionPool.getConnection();
             pst = con.prepareStatement(sql);
             pst.setInt(1, comment.getPostId());
@@ -83,15 +81,12 @@ public class CommentDAO {
 
     //댓글 수정
     public int updateComment(final int commentId, final String comment) {
-//        String url = Mysql.getInstance().getUrl();
         String sql = "update comment set comment=? where id=?";
         int result = 0;
 
         Connection con = null;
         PreparedStatement pst = null;
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
             con = ConnectionPool.getConnection();
 
             pst = con.prepareStatement(sql);
@@ -123,8 +118,6 @@ public class CommentDAO {
         Connection con = null;
         PreparedStatement pst = null;
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
             con = ConnectionPool.getConnection();
 
             pst = con.prepareStatement(sql);
@@ -154,8 +147,6 @@ public class CommentDAO {
         Connection con = null;
         PreparedStatement pst = null;
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
             con = ConnectionPool.getConnection();
             pst = con.prepareStatement(sql);
             pst.setInt(1, postId);

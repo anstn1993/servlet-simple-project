@@ -22,14 +22,11 @@ public class PostImageDAO {
     //게시물의 이미지 파일명 삭제
     public int delete(int postId, List<String> transferredExistingFiles) {
         int result = -1;//post_image테이블에서 기존 이미지를 삭제하는 쿼리 결과
-//        String url = Mysql.getInstance().getUrl();
         String sql = null;
 
         Connection con = null;
         PreparedStatement pst = null;
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
 
             con = ConnectionPool.getConnection();
 
@@ -106,48 +103,17 @@ public class PostImageDAO {
         return result;
     }
 
-    //게시물의 이미지 파일명 새롭게 update
-    public int update(int postId, List<String> newFiles) {
-        int result = 0;
-//        String url = Mysql.getInstance().getUrl();
-        String sql = "insert into post_image (post_id, file_name) values (?, ?)";
 
-        Connection con = null;
-        PreparedStatement pst = null;
-
-        try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
-            pst = con.prepareStatement(sql);
-            pst.setInt(1, postId);
-            for (String newFile : newFiles) {
-                pst.setString(2, newFile);
-                result = pst.executeUpdate();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return -1;
-        } finally {
-            if(pst != null)
-                try { pst.close(); } catch (SQLException e) { e.printStackTrace(); }
-            if(con != null)
-                try { con.close(); } catch (SQLException e) { e.printStackTrace(); }
-        }
-        return result;
-    }
 
     //이미지 파일 명 return
     public List<String> getFiles(int postId) {
         List<String> files = new ArrayList<>();
-//        String url = Mysql.getInstance().getUrl();
         String sql = "select file_name from post_image where post_id=?";
 
         Connection con = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
             con = ConnectionPool.getConnection();
 
             pst = con.prepareStatement(sql);

@@ -16,9 +16,9 @@ public class Mysql {
     public static Mysql getInstance() {
          if(mysql == null) {
              mysql = new Mysql(
-                     "jdbc:mysql://13.124.105.47:3306/soso?autoReconnect=true",
-                     "moonsoo",
-                     "Rla933466r!"
+                     "url",
+                     "username",
+                     "password"
              );
          }
 

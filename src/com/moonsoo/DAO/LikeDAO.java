@@ -2,11 +2,13 @@ package com.moonsoo.DAO;
 
 import com.moonsoo.model.Like;
 import com.moonsoo.util.ConnectionPool;
-import com.moonsoo.util.Mysql;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class LikeDAO {
     private static LikeDAO likeDAO = null;
@@ -20,15 +22,12 @@ public class LikeDAO {
 
     //게시물 업로드시 게시물 삽입
     public int insert(Like like) {//0:실패, 1:성공, -1:에러
-//        String url = Mysql.getInstance().getUrl();
         String sql = "insert into like_post (post_id, user_id) values (?, ?)";
         int result = 0;
 
         Connection con = null;
         PreparedStatement pst = null;
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
             con = ConnectionPool.getConnection();
 
             pst = con.prepareStatement(sql);
@@ -52,15 +51,12 @@ public class LikeDAO {
 
 
     public int delete(Like like) {
-//        String url = Mysql.getInstance().getUrl();
         String sql = "delete from like_post where post_id=? and user_id=?";
         int result = 0;
 
         Connection con = null;
         PreparedStatement pst = null;
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
             con = ConnectionPool.getConnection();
 
             pst = con.prepareStatement(sql);
@@ -84,7 +80,6 @@ public class LikeDAO {
 
     public JSONArray getLikeList(final int loginUserId, final int postId) {
         JSONArray likeList = new JSONArray();
-        String url = Mysql.getInstance().getUrl();
         String sql = "select user_id, user.image as profile, nickname, followed_user_id as follow_status " +
                 "from like_post " +
                 "join user on like_post.user_id=user.id " +
@@ -95,8 +90,6 @@ public class LikeDAO {
         PreparedStatement pst = null;
         ResultSet rs = null;
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
             con = ConnectionPool.getConnection();
 
             pst = con.prepareStatement(sql);

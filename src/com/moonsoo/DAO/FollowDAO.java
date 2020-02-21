@@ -2,11 +2,13 @@ package com.moonsoo.DAO;
 
 import com.moonsoo.model.Follow;
 import com.moonsoo.util.ConnectionPool;
-import com.moonsoo.util.Mysql;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class FollowDAO {
     private static FollowDAO followDAO = null;
@@ -20,15 +22,12 @@ public class FollowDAO {
 
     //게시물 업로드시 게시물 삽입
     public int insert(Follow follow) {//0:실패, 1:성공, -1:에러
-//        String url = Mysql.getInstance().getUrl();
         String sql = "insert into follow (following_user_id, followed_user_id) values (?, ?)";
         int result = 0;
 
         Connection con = null;
         PreparedStatement pst = null;
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
             con = ConnectionPool.getConnection();
 
             pst = con.prepareStatement(sql);
@@ -51,16 +50,12 @@ public class FollowDAO {
 
 
     public int delete(Follow follow) {
-//        String url = Mysql.getInstance().getUrl();
         String sql = "delete from follow where following_user_id=? and followed_user_id=?";
         int result = 0;
 
         Connection con = null;
         PreparedStatement pst = null;
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
-
             con = ConnectionPool.getConnection();
 
             pst = con.prepareStatement(sql);
@@ -83,15 +78,12 @@ public class FollowDAO {
 
     public boolean getFollowStatus(int followingId, int followedId) {
         boolean followStatus = false;
-//        String url = Mysql.getInstance().getUrl();
         String sql = "select*from follow where following_user_id=? and followed_user_id=?";
 
         Connection con = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
 
             con = ConnectionPool.getConnection();
 
@@ -119,7 +111,6 @@ public class FollowDAO {
     }
 
     public int getFollowingCount(int id) {
-        String url = Mysql.getInstance().getUrl();
         String sql = "select count(*) as following_count from follow where following_user_id=?";
         int count = 0;
 
@@ -128,8 +119,6 @@ public class FollowDAO {
         ResultSet rs = null;
 
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
 
             con = ConnectionPool.getConnection();
 
@@ -158,7 +147,6 @@ public class FollowDAO {
     public JSONArray getFollowingList(final int followingId, final int loginUserId) {
         JSONArray followings = new JSONArray();
 
-//        String url = Mysql.getInstance().getUrl();
         String sql = "select user.id as user_id, nickname, image, f2.following_user_id as following_status " +
                 "from follow f1 " +
                 "left join follow f2 on f1.followed_user_id=f2.followed_user_id and f2.following_user_id=? " +
@@ -169,8 +157,6 @@ public class FollowDAO {
         PreparedStatement pst = null;
         ResultSet rs = null;
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
 
             con = ConnectionPool.getConnection();
 
@@ -203,7 +189,6 @@ public class FollowDAO {
 
     public JSONArray getFollowerList(final int followedId, final int loginUserId) {
         JSONArray followers = new JSONArray();
-//        String url = Mysql.getInstance().getUrl();
         String sql = "select user.id as user_id, nickname, image, f2.following_user_id as following_status " +
                 "from follow f1 " +
                 "left join follow f2 on f1.following_user_id=f2.followed_user_id and f2.following_user_id=? " +
@@ -214,8 +199,6 @@ public class FollowDAO {
         ResultSet rs = null;
 
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
             con = ConnectionPool.getConnection();
 
             pst = con.prepareStatement(sql);
@@ -250,7 +233,6 @@ public class FollowDAO {
     }
 
     public int getFollowerCount(int id) {
-//        String url = Mysql.getInstance().getUrl();
         String sql = "select count(*) as follower_count from follow where followed_user_id=?";
         int count = 0;
 
@@ -259,8 +241,6 @@ public class FollowDAO {
         ResultSet rs = null;
 
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
             con = ConnectionPool.getConnection();
 
             pst = con.prepareStatement(sql);

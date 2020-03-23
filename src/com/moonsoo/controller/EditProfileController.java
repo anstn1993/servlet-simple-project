@@ -39,60 +39,6 @@ public class EditProfileController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-
-//        if((profileFile == null || profileFile.equals("")) && (profileName == null || profileName.equals(""))) {//파일이 안 넘어옴 && 파일 명도 없는 경우
-//            if(session.getAttribute("profile") != null && session.getAttribute("profile").equals("")) {//기존 이미지가 있다면
-//                //기존 이미지 삭제
-//                String formerProfile = (String) session.getAttribute("profile");
-//                String profileDir = getServletContext().getRealPath("profile");
-//                File file = new File(profileDir+ "/" + formerProfile);
-//                file.delete();
-//                //세션의 프로필 사진 데이터 null로 업데이트
-//                session.setAttribute("profile", null);
-//                //TODO:db도 수정
-//            }
-//        }
-//        else if(profileFile != null && !profileFile.equals("")){//파일이 넘어온 경우
-//            if(session.getAttribute("profile") != null && session.getAttribute("profile").equals("")) {//기존 이미지가 있다면
-//                //기존 이미지 삭제
-//                String formerProfile = (String) session.getAttribute("profile");
-//                String profileDir = getServletContext().getRealPath("profile");
-//                File file = new File(profileDir+ "/" + formerProfile);
-//                file.delete();
-//            }
-//
-//            String timeStamp = new SimpleDateFormat("HHmmss").format(new Date());
-//            String newProfileName = request.getSession().getAttribute("account") + timeStamp +".jpg" ;//새로운 프로필 사진 명
-//
-//            //세션 수정
-//        }
-//
-//
-//        if(profile == null || profile.equals("")) {
-//            String timeStamp = new SimpleDateFormat("HHmmss").format(new Date());
-//            String newProfileName = request.getSession().getAttribute("account") + timeStamp +".jpg" ;//새로운 프로필 사진 명
-//            request.getSession().setAttribute("profile", newProfileName);//세션에 프로필 사진 업데이트
-//        }
-//        else {
-//
-//        }
-
-
-//        String saveDir = getServletContext().getRealPath("profile");//프로필 저장 디렉토리
-//        System.out.println(saveDir);
-//        int maxSize = 10*1024*1024;//3mb
-//        String encoding = "UTF-8";
-//        MultipartRequest multipartRequest = new MultipartRequest(request, saveDir, maxSize, encoding, new FileUploadRename());
-//        System.out.println("파일 명: " + multipartRequest.getOriginalFileName("profile"));
-//        System.out.println("파일 타입: " + multipartRequest.getContentType("profile"));
-
-
-
-    }
-
-    @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");

@@ -11,13 +11,6 @@ public class RequestEncodingSetFilter implements Filter {
     }
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
-//        HttpServletRequest req = (HttpServletRequest) request;
-//        if(!req.getRequestURI().contains("/edit/user")){
-//            request.setCharacterEncoding("UTF-8");
-//        }
-//        else {
-//            request.setCharacterEncoding("multipart/form-data");
-//        }
         request.setCharacterEncoding("UTF-8");
         chain.doFilter(request, response);
     }

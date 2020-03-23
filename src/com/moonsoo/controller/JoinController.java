@@ -99,17 +99,6 @@ public class JoinController extends HttpServlet {
                     + "<a href ='" + host + "join/email-check?account=" + account + "&code=" + emailHash + "'> 이메일 인증하기 </a>";
 
             Properties prop = new Properties();
-//            prop.put("mail.smtp.user", from);
-//            prop.put("mail.smtp.host", "smtp.gmail.com");
-//            prop.put("mail.smtp.port", 465);
-//            prop.put("mail.smtp.starttls.enable", "true");
-//            prop.put("mail.smtp.auth", "true");
-//            prop.put("mail.smtp.debug", "true");
-//            prop.put("mail.smtp.socketFactory.port", 465);
-//            prop.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-//            prop.put("mail.smtp.socketFactory.fallback", "false");
-//            prop.put("mail.smtp.ssl.enable", "true");
-//            prop.put("mail.smtp.ssl.trust", "smtp.gmail.com");
             prop.put("mail.smtp.host", "smtp.naver.com");
             prop.put("mail.smtp.port", 465);
             prop.put("mail.smtp.auth", "true");

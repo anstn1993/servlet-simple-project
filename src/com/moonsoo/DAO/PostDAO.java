@@ -28,7 +28,6 @@ public class PostDAO {
 
     //게시물 업로드시 게시물 삽입
     public int insert(final PostDTO postDTO, final PostImageDTO postImageDTO) {//0:실패, 1:성공, 2:에러
-//        String url = Mysql.getInstance().getUrl();
         String sql = "insert into post (user_id, article) values (?, ?)";
 
         Connection con = null;
@@ -36,8 +35,6 @@ public class PostDAO {
         Statement st = null;
         ResultSet rs = null;
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
             con = ConnectionPool.getConnection();//커넥션 풀에서 커넥션 객체를 불러옴
 
             pst = con.prepareStatement(sql);
@@ -82,7 +79,6 @@ public class PostDAO {
 
     public JSONObject getPost(int postId) {//로그아웃 상태에서 요청
 
-        String url = Mysql.getInstance().getUrl();
         String sql = "select post.user_id as user_id, article, date from post where post.id=?";
 
         JSONObject postData = new JSONObject();
@@ -95,8 +91,6 @@ public class PostDAO {
         PreparedStatement pst = null;
         ResultSet rs = null;
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
             con = ConnectionPool.getConnection();
 
 
@@ -164,7 +158,6 @@ public class PostDAO {
 
     public JSONObject getPost(int loginUserId, int postId) {//로그인 상태에서 요청
 
-//        String url = Mysql.getInstance().getUrl();
         String sql = "select post.user_id as user_id, article, date, like_post.post_id as like_status from post left join like_post on post.id=like_post.post_id and like_post.user_id=? where post.id=?";
 
         JSONObject postData = new JSONObject();
@@ -177,8 +170,6 @@ public class PostDAO {
         PreparedStatement pst = null;
         ResultSet rs = null;
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
             con = ConnectionPool.getConnection();
 
             pst = con.prepareStatement(sql);
@@ -251,7 +242,6 @@ public class PostDAO {
 
         List<Post> posts = new ArrayList<>();
 
-//        String url = Mysql.getInstance().getUrl();
         String sql = "select user.id, user.nickname, user.image, post.id as post_id, post.article, post.date, post_image.file_name, like_post.post_id as like_status " +
                 "from post " +
                 "left join user on post.user_id=user.id " +
@@ -266,8 +256,6 @@ public class PostDAO {
         ResultSet rs = null;
 
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
 
             con = ConnectionPool.getConnection();//커넥션 풀에서 커넥션 객체를 하나 가져온다.
 
@@ -307,7 +295,6 @@ public class PostDAO {
     //페이징으로 다음 게시물을 가져올 때 호출되는 메소드
     public List<Post> getUserPosts(int userId, int startIndex) {
         List<Post> posts = new ArrayList<>();
-        String url = Mysql.getInstance().getUrl();
         String sql = "select user.id, post.id as post_id, post.article, pi.file_name, post.date from post, (select*from post_image)pi, (select*from user)user" +
                 " where post.user_id=user.id and post.id=pi.post_id and user.id=? group by post_id order by post_id desc limit ?, 6";
 
@@ -315,8 +302,6 @@ public class PostDAO {
         PreparedStatement pst = null;
         ResultSet rs = null;
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
             con = ConnectionPool.getConnection();
 
             pst = con.prepareStatement(sql);
@@ -348,9 +333,9 @@ public class PostDAO {
     }
 
     public JSONArray getNextPosts(int loginUserId, int lastPostId) {
+
         JSONArray posts = new JSONArray();
 
-//        String url = Mysql.getInstance().getUrl();
         String sql = "select count(*) as start_index from post where id>=?";
 
 
@@ -359,8 +344,6 @@ public class PostDAO {
         Connection con = null;
 
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
             con = ConnectionPool.getConnection();//커넥션 풀에서 커넥션 객체를 하나 가져온다.
 
             int startIndex = 0;//게시물 테이블 레코드의 시작 index
@@ -421,7 +404,6 @@ public class PostDAO {
     //페이징으로 다음 게시물을 가져올 때 호출되는 메소드(사용자 페이지)
     public JSONArray getNextPostsInUserPage(int userId, int lastPostId) {
         JSONArray posts = new JSONArray();
-        //        String url = Mysql.getInstance().getUrl();
         String sql = null;
 
 
@@ -430,8 +412,6 @@ public class PostDAO {
         Connection con = null;
 
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
             con = ConnectionPool.getConnection();//커넥션 풀에서 커넥션 객체를 하나 가져온다.
 
             int startIndex = 0;//게시물 테이블 레코드의 시작 index
@@ -489,16 +469,12 @@ public class PostDAO {
     public List<String> getPostImages(int postId) {
         List<String> images = new ArrayList<>();
 
-//        String url = Mysql.getInstance().getUrl();
         String sql = "select file_name from post_image where post_id=?";
 
         Connection con = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
             con = ConnectionPool.getConnection();
             pst = con.prepareStatement(sql);
             pst.setInt(1, postId);
@@ -526,16 +502,14 @@ public class PostDAO {
 
     //게시물 작성자 id를 반환하는 메소드
     public int getUserId(int postId) {
+
         int userId = 0;//사용자 id
-//        String url = Mysql.getInstance().getUrl();
         String sql = "select user_id from post where id=?";
 
         Connection con = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
             con = ConnectionPool.getConnection();
 
             pst = con.prepareStatement(sql);
@@ -563,16 +537,14 @@ public class PostDAO {
     }
 
     public String getArticle(int postId) {
+
         String article = null;
-//        String url = Mysql.getInstance().getUrl();
         String sql = "select article from post where id=?";
 
         Connection con = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
             con = ConnectionPool.getConnection();
 
             pst = con.prepareStatement(sql);
@@ -599,31 +571,6 @@ public class PostDAO {
         }
         return article;
     }
-
-    public String getUploadTime(int postId) {
-        String url = Mysql.getInstance().getUrl();
-        String sql = "select date from post where id=?";
-        Date date = null;
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
-            PreparedStatement pst = con.prepareStatement(sql);
-            pst.setInt(1, postId);
-            ResultSet rs = pst.executeQuery();
-            if (rs.next()) {
-                date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("date"));
-            }
-
-            rs.close();
-            pst.close();
-            con.close();
-            return beforeTime(date);
-        } catch (ClassNotFoundException | SQLException | ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
 
     //게시물 수정 update
     public int update(int postId, String article, List<String> newFiles, List<String> transferredExistingFiles) {
@@ -738,14 +685,11 @@ public class PostDAO {
 
     public int deletePost(int postId) {
         int result = -1;
-//        String url = Mysql.getInstance().getUrl();
         String sql = "delete from post where id=?";
 
         Connection con = null;
         PreparedStatement pst = null;
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection(url, Mysql.getInstance().getAccount(), Mysql.getInstance().getPassword());
             con = ConnectionPool.getConnection();
             pst = con.prepareStatement(sql);
             pst.setInt(1, postId);

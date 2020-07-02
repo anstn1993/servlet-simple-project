@@ -2,7 +2,7 @@
 
 This is a servlet based web application. 
 
-[웹 페이지 이동](http://13.124.105.47)
+[웹 페이지 이동](http://13.209.207.163/)
 
 ## 제작 의도 및 성과
 

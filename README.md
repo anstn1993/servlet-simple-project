@@ -21,7 +21,7 @@ Docker compose를 이용해 톰켓 서버 서비스 컨테이너와 데이터베
 
 ## 사용 기술
 
-언어: Java, JSP, Bootstrap, javascript
+언어: Java, JSP, javascript
 
 IDE: IntelliJ
 

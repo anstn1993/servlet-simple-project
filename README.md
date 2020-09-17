@@ -2,8 +2,6 @@
 
 This is a servlet based web application. 
 
-[웹 페이지 이동](http://13.209.207.163/)
-
 ## 제작 의도 및 성과
 
 서블릿과 JSP를 이용해서 자바 기반의 웹 에플리케이션 개발을 학습하기 위해서 만들었습니다.
